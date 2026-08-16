@@ -1,0 +1,18 @@
+{
+  "name": "limitless",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix client run start",
+    "lint": "oxlint"
+  },
+  "dependencies": {
+    "swiper": "^14.0.7"
+  },
+  "devDependencies": {
+    "oxlint": "^1.71.0"
+  }
+}

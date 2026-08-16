@@ -1,0 +1,184 @@
+@use "./helpers/index.scss" as *;
+
+/*
+Typography weights
+ExtraBlack – 950
+Black – 900
+ExtraBold – 800
+Bold – 700
+SemiBold – 600
+Medium – 500
+Normal – 400
+SemiLight – 350
+Light – 300
+ExtraLight – 200
+Thin – 100 
+*/
+
+:root {
+  --color-white: #ffffff;
+  --color-black: #111111;
+
+  --color-white-transparent-05: rgba(255, 255, 255, 0.05);
+  --color-white-transparent-10: rgba(255, 255, 255, 0.1);
+  --color-white-transparent-20: rgba(255, 255, 255, 0.2);
+  --color-white-transparent-30: rgba(255, 255, 255, 0.3);
+
+  --color-gray-08: #141414;
+  --color-gray-10: #1a1a1a;
+  --color-gray-15: #262626;
+  --color-gray-20: #333333;
+  --color-gray-30: #4d4d4d;
+  --color-gray-40: #666666;
+  --color-gray-50: #808080;
+  --color-gray-60: #999999;
+  --color-gray-80: #cccccc;
+
+  --color-error: #ab052c;
+
+  --bg-primary: var(--color-black);
+  --bg-card: var(--color-white-transparent-05);
+  --bg-card-hover: var(--color-white-transparent-10);
+
+  --text-primary: var(--color-white);
+  --text-secondary: var(--color-gray-60);
+
+  --btn-primary-bg: var(--color-gray-08);
+  --btn-primary-text: var(--color-white);
+  --btn-secondary-bg: transparent;
+  --btn-secondary-border: var(--color-gray-08);
+
+  --glow-primary: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  --gradient-card: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+
+  --border: 1px solid var(--color-white-transparent-10);
+  --border-hover: 1px solid var(--color-white-transparent-30);
+  --border-large: 2px solid rgba(255, 255, 255, 0.27);
+  --border-small: 1px solid rgba(255, 255, 255, 0.15);
+
+  --border-radius-xl: 100px; /* Для кнопок и бейджиков */
+  --border-radius-l: 32px; /* Для крупных секций */
+  --border-radius-m: 24px; /* Для карточек (графики, отзывы) */
+  --border-radius-s: 16px; /* Для мелких внутренних карточек */
+  --border-radius-xs: 10px;
+  --border-radius-xxs: 8px;
+  --border-radius-xxxs: 4px;
+
+  --border-width-l: 4px;
+  --border-width-m: 2px;
+  --border-width-s: 1px;
+
+  /* Типографика */
+  --font-family-main: "Plus JakartaSans", sans-serif;
+  --font-secondary: "JetBrains Mono", sans-serif;
+
+  /* Сетка и отступы */
+  --container-width: #{fluid-to-laptop(
+      $container-desktop-width,
+      $container-laptop-width
+    )};
+  --container-padding-x: 162px;
+  --widthElFrom: #{fluid-from-desktop(311, 272)};
+
+  @include desktop {
+    --container-padding-x: 162px;
+  }
+  @include laptop-large {
+    --container-padding-x: #{fluid(80, 16)};
+  }
+
+  /* Вертикальные отступы между секциями (в макете много воздуха) */
+  --section-padding-y: #{fluid-from-desktop-to-mobile(180, 80)};
+  --element-spacing: 24px; /* Стандартный отступ между элементами в карточках */
+
+  /* Анимации */
+  --transition-duration: 0.2s;
+  --transition-duration-longer: 0.4s;
+  --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ============================================================
+   Палитра «Neon Space» — ТОЛЬКО для страницы Dashboard
+   (макет gamified-dashboard v3: космос + неоновый фиолет)
+   ============================================================ */
+
+  /* --- Фоны: от самого глубокого космоса к карточкам --- */
+  --dashboard-space-950: #04040f; /* Самый тёмный — края страницы, виньетка */
+  --dashboard-space-900: #08081a; /* Основной фон страницы */
+  --dashboard-space-800: #0d0d26; /* Фон крупных секций (профиль, таск-лист) */
+  --dashboard-space-700: #141433; /* Приподнятые элементы внутри секций */
+
+  /* --- Неоновый фиолет: главный акцент --- */
+  --dashboard-violet-neon: #8b5cf6; /* База: грани радара, активные состояния */
+  --dashboard-violet-bright: #a78bfa; /* Яркий: ноды радара, иконки атрибутов */
+  --dashboard-violet-deep: #6d28d9; /* Тёмный: низ градиентов, глубокое свечение */
+  --dashboard-violet-soft: #c4b5fd; /* Светлый: значения EXP, подписи на тёмном */
+
+  /* --- Синий неон: второй акцент --- */
+  --dashboard-blue-neon: #4f7cff; /* Кнопки, холодная часть радара */
+  --dashboard-blue-bright: #60a5fa; /* Яркие блики */
+  --dashboard-cyan-ice: #7dd3fc; /* Самые холодные мелкие блики */
+
+  /* --- Текст --- */
+  --dashboard-text-glow: #eceaff; /* Заголовки, никнейм — белый с фиолетовым подтоном */
+  --dashboard-text-muted: #8f8fb8; /* Вторичный текст — серо-лавандовый */
+
+  /* --- Стрик (огонёк в углу секции) --- */
+  --dashboard-streak-flame: #fb923c; /* Сам огонёк */
+  --dashboard-streak-glow: rgba(251, 146, 60, 0.35); /* Его свечение */
+
+  /* --- Свечения (box-shadow) --- */
+  --dashboard-glow-violet-sm: 0 0 12px rgba(139, 92, 246, 0.45); /* Ноды, иконки */
+  --dashboard-glow-violet-md: 0 0 24px rgba(139, 92, 246, 0.35); /* Активные элементы, кнопки */
+  --dashboard-glow-violet-lg: 0 0 60px rgba(124, 58, 237, 0.3); /* Радар, карточка Годжо */
+  --dashboard-glow-text: 0 0 16px rgba(167, 139, 250, 0.55); /* text-shadow для никнейма и цифр */
+
+  /* --- Градиенты --- */
+  --dashboard-gradient-progress: linear-gradient(
+    90deg,
+    var(--dashboard-violet-deep) 0%,
+    var(--dashboard-violet-bright) 100%
+  ); /* Прогресс-бар уровня */
+  --dashboard-gradient-button: linear-gradient(
+    135deg,
+    var(--dashboard-violet-deep) 0%,
+    var(--dashboard-blue-neon) 100%
+  ); /* Кнопка «Seek Guidance» */
+  --dashboard-gradient-nickname: linear-gradient(
+    90deg,
+    #eceaff 0%,
+    var(--dashboard-violet-bright) 100%
+  ); /* Никнейм */
+  --dashboard-glow-space: radial-gradient(
+    circle at 30% 20%,
+    rgba(124, 58, 237, 0.18) 0%,
+    rgba(4, 4, 15, 0) 60%
+  ); /* Фоновое свечение страницы */
+
+  /* --- Границы --- */
+  --dashboard-border-neon: 4px solid rgba(139, 92, 246, 0.35); /* Обводка карточек */
+  --dashboard-border-neon-hover: 4px solid rgba(167, 139, 250, 0.65); /* При наведении — ярче */
+  --dashboard-smoke: rgba(124, 58, 237, 0.9);
+
+  /* --- Стекло (glassmorphism) --- */
+  --dashboard-bg-glass: rgba(
+    139,
+    92,
+    246,
+    0.06
+  ); /* Лёгкая заливка стеклянных карточек */
+  --dashboard-bg-glass-strong: rgba(
+    13,
+    13,
+    38,
+    0.72
+  ); /* Плотное стекло — модалка Годжо */
+  --dashboard-backdrop-blur: blur(20px); /* Для backdrop-filter */
+}

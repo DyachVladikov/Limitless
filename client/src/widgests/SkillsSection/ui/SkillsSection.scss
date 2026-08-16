@@ -1,0 +1,212 @@
+.skills-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  background-color: var(--dashboard-bg-glass);
+  border-radius: var(--border-radius-l);
+  border: var(--dashboard-border-neon);
+
+  &__user {
+    border-color: var(--gradient-card);
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 50px;
+
+    &-avatar {
+      align-self: center;
+      position: relative;
+      border: var(--border);
+      border: var(--dashboard-border-neon);
+      border-radius: var(--border-radius-l);
+      width: 450px;
+      height: 550px;
+
+      &-streak {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50px;
+        height: 50px;
+        background: var(--dashboard-streak-flame);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: var(--font-secondary);
+      }
+
+      & > img {
+        position: absolute;
+        object-fit: cover;
+        width: 88%;
+        top: 44%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        filter: brightness(0.9);
+      }
+      &::before,
+      &::after {
+        position: absolute;
+        content: "";
+        width: 100%;
+        bottom: -10px;
+        pointer-events: none;
+      }
+
+      &::before {
+        z-index: 1;
+        height: 180px;
+        background: linear-gradient(
+          to top,
+          color-mix(in srgb, rgb(139, 92, 246) 55%, black) 0%,
+          color-mix(in srgb, rgb(139, 92, 246) 55%, black) 45%,
+          color-mix(in srgb, rgba(139, 92, 246, 0.55) 55%, black) 70%,
+          transparent 100%
+        );
+        filter: url(#smoke-filter) blur(4px);
+      }
+
+      &::after {
+        z-index: 2;
+        height: 280px;
+        background: linear-gradient(
+          to top,
+          color-mix(in srgb, rgba(139, 92, 246, 0.5) 55%, black) 0%,
+          transparent 60%
+        );
+        filter: url(#smoke-filter) blur(16px);
+      }
+    }
+
+    &-info {
+      width: 100%;
+    }
+
+    &-name-rank {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &-level {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-secondary);
+      font-weight: 200;
+    }
+
+    &-bar {
+      &-wrapper {
+        width: 100%;
+        height: 30px;
+        background-color: transparent;
+        display: flex;
+        align-items: center;
+        border: 3px solid black;
+        border-radius: var(--border-radius-xxs);
+        z-index: 1;
+      }
+      &-inner {
+        background: var(--dashboard-gradient-progress);
+        height: 30px;
+        z-index: -1;
+        border-radius: var(--border-radius-xxs);
+      }
+    }
+  }
+
+  &__dashboard {
+    display: flex;
+    flex-direction: column;
+    border-color: var(--gradient-card);
+    padding: 50px;
+
+    &-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--dashboard-text-muted);
+      font-family: var(--font-secondary);
+      font-size: 14px;
+      letter-spacing: 0.04em;
+
+      svg {
+        color: var(--dashboard-violet-bright);
+      }
+    }
+  }
+
+  &__radar {
+    width: 100%;
+    margin: auto;
+
+    &-chart {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    &-ring {
+      fill: none;
+      stroke: rgba(139, 92, 246, 0.35);
+      stroke-width: 1.5;
+
+      &--outer {
+        stroke: rgba(167, 139, 250, 0.6);
+        stroke-width: 2;
+      }
+    }
+
+    &-axis {
+      stroke: rgba(139, 92, 246, 0.3);
+      stroke-width: 1;
+    }
+
+    &-vertex {
+      fill: var(--dashboard-cyan-ice);
+      opacity: 0.8;
+    }
+
+    &-polygon {
+      fill: url(#radar-fill);
+      stroke: var(--dashboard-violet-bright);
+      stroke-width: 2.5;
+      stroke-linejoin: round;
+      filter: url(#radar-glow);
+    }
+
+    &-dot {
+      fill: var(--dashboard-text-glow);
+      filter: url(#radar-glow);
+    }
+  }
+
+  &__stat {
+    &-badge {
+      fill: rgba(139, 92, 246, 0.08);
+      stroke: rgba(167, 139, 250, 0.55);
+      stroke-width: 1.2;
+      stroke-dasharray: 4 4;
+    }
+
+    &-icon {
+      color: var(--dashboard-violet-bright);
+    }
+
+    &-name {
+      fill: var(--dashboard-text-muted);
+      font-family: var(--font-secondary);
+      font-size: 15px;
+    }
+
+    &-value {
+      fill: var(--dashboard-text-glow);
+      font-family: var(--font-secondary);
+      font-size: 26px;
+      font-weight: 700;
+      filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.55));
+    }
+  }
+}
