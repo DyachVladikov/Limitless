@@ -1,10 +1,8 @@
 .skills-section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto;
-  background-color: var(--dashboard-bg-glass);
-  border-radius: var(--border-radius-l);
-  border: var(--dashboard-border-neon);
+  grid-template-columns: auto 1.25fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
 
   &__user {
     border-color: var(--gradient-card);
@@ -12,16 +10,15 @@
     flex-direction: column;
     align-items: start;
     padding: 50px;
+    border: var(--dashboard-border-neon);
+    border-radius: var(--border-radius-l);
+    background: var(--dashboard-bg-glass);
 
     &-avatar {
       align-self: center;
       position: relative;
-      border: var(--border);
-      border: var(--dashboard-border-neon);
-      border-radius: var(--border-radius-l);
-      width: 450px;
-      height: 550px;
-
+      width: 500px;
+      height: 700px;
       &-streak {
         position: absolute;
         top: 0;
@@ -80,12 +77,24 @@
 
     &-info {
       width: 100%;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
     }
 
-    &-name-rank {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    &-name {
+      align-self: center;
+      background: var(--dashboard-gradient-nickname);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    &-rank {
+      &-el {
+        margin-left: 6px;
+        color: var(--dashboard-violet-neon);
+      }
     }
 
     &-level {
@@ -113,100 +122,6 @@
         z-index: -1;
         border-radius: var(--border-radius-xxs);
       }
-    }
-  }
-
-  &__dashboard {
-    display: flex;
-    flex-direction: column;
-    border-color: var(--gradient-card);
-    padding: 50px;
-
-    &-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--dashboard-text-muted);
-      font-family: var(--font-secondary);
-      font-size: 14px;
-      letter-spacing: 0.04em;
-
-      svg {
-        color: var(--dashboard-violet-bright);
-      }
-    }
-  }
-
-  &__radar {
-    width: 100%;
-    margin: auto;
-
-    &-chart {
-      display: block;
-      width: 100%;
-      height: auto;
-      overflow: visible;
-    }
-
-    &-ring {
-      fill: none;
-      stroke: rgba(139, 92, 246, 0.35);
-      stroke-width: 1.5;
-
-      &--outer {
-        stroke: rgba(167, 139, 250, 0.6);
-        stroke-width: 2;
-      }
-    }
-
-    &-axis {
-      stroke: rgba(139, 92, 246, 0.3);
-      stroke-width: 1;
-    }
-
-    &-vertex {
-      fill: var(--dashboard-cyan-ice);
-      opacity: 0.8;
-    }
-
-    &-polygon {
-      fill: url(#radar-fill);
-      stroke: var(--dashboard-violet-bright);
-      stroke-width: 2.5;
-      stroke-linejoin: round;
-      filter: url(#radar-glow);
-    }
-
-    &-dot {
-      fill: var(--dashboard-text-glow);
-      filter: url(#radar-glow);
-    }
-  }
-
-  &__stat {
-    &-badge {
-      fill: rgba(139, 92, 246, 0.08);
-      stroke: rgba(167, 139, 250, 0.55);
-      stroke-width: 1.2;
-      stroke-dasharray: 4 4;
-    }
-
-    &-icon {
-      color: var(--dashboard-violet-bright);
-    }
-
-    &-name {
-      fill: var(--dashboard-text-muted);
-      font-family: var(--font-secondary);
-      font-size: 15px;
-    }
-
-    &-value {
-      fill: var(--dashboard-text-glow);
-      font-family: var(--font-secondary);
-      font-size: 26px;
-      font-weight: 700;
-      filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.55));
     }
   }
 }

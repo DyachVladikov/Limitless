@@ -1,0 +1,39 @@
+.stats-tracker {
+  width: 100%;
+  border: var(--dashboard-border-neon);
+  border-radius: var(--border-radius-l);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  column-gap: 20px;
+  padding: 16px;
+  background: var(--dashboard-bg-glass);
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+    align-items: center;
+    position: relative;
+
+    &-name {
+      font-family: var(--font-secondary);
+      background: var(--dashboard-gradient-nickname);
+      -webkit-text-fill-color: #0000;
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    &:not(:last-child) {
+      &::after {
+        content: "";
+        position: absolute;
+        right: -10px;
+        width: 5px;
+        height: 100%;
+        background-color: white;
+      }
+    }
+  }
+}

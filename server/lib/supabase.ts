@@ -1,27 +1,21 @@
 import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export function getSupabase(request: NextRequest) {
-  const token =
-    request.headers.get("Authorization")?.replace("Bearer ", "") ?? null;
-
-  const options = token
-    ? { global: { headers: { Authorization: `Bearer ${token}` } } }
-    : {};
-
-  const supabase = createClient(
+export function getSupabase() {
+  return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    options,
   );
-
-  return { supabase, token };
 }
 
-export async function getUserId(supabase: SupabaseClient, token: string) {
-  const { data } = await supabase.auth.getUser(token);
-  return data.user?.id ?? null;
+export async function getProfile(supabase: SupabaseClient) {
+  const { data } = await supabase
+    .from("profiles")
+    .select("*")
+    .limit(1)
+    .single();
+  return data;
 }
 
 export function pick(body: Record<string, unknown>, allowed: string[]) {
@@ -30,10 +24,6 @@ export function pick(body: Record<string, unknown>, allowed: string[]) {
       ([key, value]) => allowed.includes(key) && value !== undefined,
     ),
   );
-}
-
-export function unauthorized() {
-  return NextResponse.json({ error: "Нужна авторизация" }, { status: 401 });
 }
 
 export function serverError(error: { message: string }) {

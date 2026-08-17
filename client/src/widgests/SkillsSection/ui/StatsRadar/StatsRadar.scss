@@ -1,0 +1,96 @@
+.stats-radar {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--border-radius-l);
+  border: var(--dashboard-border-neon);
+  padding: 50px;
+  grid-row: span 2 / span 2;
+  grid-column-start: 2;
+  grid-row-start: 1;
+  background: var(--dashboard-bg-glass);
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--dashboard-text-muted);
+    font-family: var(--font-secondary);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+
+    svg {
+      color: var(--dashboard-violet-bright);
+    }
+  }
+
+  &__chart {
+    width: 100%;
+    margin: auto;
+  }
+
+  &__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  &__ring {
+    fill: none;
+    stroke: rgba(139, 92, 246, 0.35);
+    stroke-width: 1.5;
+
+    &--outer {
+      stroke: rgba(167, 139, 250, 0.6);
+      stroke-width: 2;
+    }
+  }
+
+  &__axis {
+    stroke: rgba(139, 92, 246, 0.3);
+    stroke-width: 1;
+  }
+
+  &__vertex {
+    fill: var(--dashboard-cyan-ice);
+    opacity: 0.8;
+  }
+
+  &__polygon {
+    fill: url(#radar-fill);
+    stroke: var(--dashboard-violet-bright);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    filter: url(#radar-glow);
+  }
+
+  &__dot {
+    fill: var(--dashboard-text-glow);
+    filter: url(#radar-glow);
+  }
+
+  &__badge {
+    fill: rgba(139, 92, 246, 0.08);
+    stroke: rgba(167, 139, 250, 0.55);
+    stroke-width: 1.2;
+    stroke-dasharray: 4 4;
+  }
+
+  &__icon {
+    color: var(--dashboard-violet-bright);
+  }
+
+  &__name {
+    fill: var(--dashboard-text-muted);
+    font-family: var(--font-secondary);
+    font-size: 15px;
+  }
+
+  &__value {
+    fill: var(--dashboard-text-glow);
+    font-family: var(--font-secondary);
+    font-size: 26px;
+    font-weight: 700;
+    filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.55));
+  }
+}

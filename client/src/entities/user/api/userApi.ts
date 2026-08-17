@@ -1,10 +1,12 @@
+"use client";
+
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { User } from "../model/types";
-export function UserApi() {
+import { api } from "@/shared/api/axios";
+
+export function UserApi<T>() {
   const { data, isLoading } = useQuery({
     queryKey: ["user"],
-    queryFn: () => axios.get<User>("/api/user"),
+    queryFn: () => api.get<T>("user").then((response) => response.data),
   });
 
   return { data, isLoading };

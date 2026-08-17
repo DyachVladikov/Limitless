@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabase, pick, serverError, unauthorized } from "@/lib/supabase";
+import { getSupabase, pick, serverError } from "@/lib/supabase";
 
 type Params = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: NextRequest, { params }: Params) {
-  const { supabase, token } = getSupabase(request);
-  if (!token) return unauthorized();
+  const supabase = getSupabase();
 
   const { id } = await params;
   const body = await request.json();
@@ -28,8 +27,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 }
 
 export async function DELETE(request: NextRequest, { params }: Params) {
-  const { supabase, token } = getSupabase(request);
-  if (!token) return unauthorized();
+  const supabase = getSupabase();
 
   const { id } = await params;
 

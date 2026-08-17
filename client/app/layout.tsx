@@ -3,8 +3,7 @@ import type { ReactNode } from "react";
 import "@/app/styles/globals.scss";
 import { Footer, Header } from "@/widgests";
 import { MainLayout } from "@/shared/MainLayout";
-import StoreProvider from "@/app/providers";
-import AppQueryClientProvider from "@/app/providers";
+import { StoreProvider, QueryProvider } from "@/app/providers";
 
 export const metadata: Metadata = {
   title: "limitless",
@@ -14,7 +13,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <AppQueryClientProvider>
+      <QueryProvider>
         <StoreProvider>
           <body>
             <MainLayout
@@ -24,7 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             />
           </body>
         </StoreProvider>
-      </AppQueryClientProvider>
+      </QueryProvider>
     </html>
   );
 }

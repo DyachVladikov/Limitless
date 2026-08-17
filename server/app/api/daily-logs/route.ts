@@ -1,15 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getSupabase,
-  getUserId,
-  pick,
-  serverError,
-  unauthorized,
-} from "@/lib/supabase";
+import { getSupabase, getProfile, pick, serverError } from "@/lib/supabase";
 
 export async function GET(request: NextRequest) {
-  const { supabase, token } = getSupabase(request);
-  if (!token) return unauthorized();
+  const supabase = getSupabase();
 
   const date =
     new URL(request.url).searchParams.get("date") ??
@@ -26,15 +19,16 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const { supabase, token } = getSupabase(request);
-  if (!token) return unauthorized();
+  const supabase = getSupabase();
 
-  const userId = await getUserId(supabase, token);
-  if (!userId) return unauthorized();
+  const profile = await getProfile(supabase);
+  if (!profile) {
+    return NextResponse.json({ error: "Профиль не найден" }, { status: 404 });
+  }
 
   const body = await request.json();
   const log = {
-    user_id: userId,
+    user_id: profile.id,
     log_date: new Date().toISOString().slice(0, 10),
     ...pick(body, [
       "carbs_level",

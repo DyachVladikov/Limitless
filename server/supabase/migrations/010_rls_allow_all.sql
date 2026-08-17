@@ -1,0 +1,34 @@
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE quest_templates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE quest_completions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE daily_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE academy_courses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE academy_labs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pet_projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE mental_laws ENABLE ROW LEVEL SECURITY;
+ALTER TABLE rationality_books ENABLE ROW LEVEL SECURITY;
+ALTER TABLE coach_dialogues ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Пользователь видит свой профиль" ON profiles;
+DROP POLICY IF EXISTS "Пользователь создает свой профиль" ON profiles;
+DROP POLICY IF EXISTS "Пользователь обновляет свой профиль" ON profiles;
+DROP POLICY IF EXISTS "Шаблоны квестов видны всем" ON quest_templates;
+DROP POLICY IF EXISTS "Пользователь управляет своими выполненными квестами" ON quest_completions;
+DROP POLICY IF EXISTS "Пользователь управляет своими логами" ON daily_logs;
+DROP POLICY IF EXISTS "Пользователь управляет своими курсами" ON academy_courses;
+DROP POLICY IF EXISTS "Пользователь управляет своими лабораторными" ON academy_labs;
+DROP POLICY IF EXISTS "Пользователь управляет своими проектами" ON pet_projects;
+DROP POLICY IF EXISTS "Пользователь управляет своими законами" ON mental_laws;
+DROP POLICY IF EXISTS "Пользователь управляет своими книгами" ON rationality_books;
+DROP POLICY IF EXISTS "Диалоги коучей видны всем" ON coach_dialogues;
+
+CREATE POLICY "allow_all" ON profiles FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON quest_templates FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON quest_completions FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON daily_logs FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON academy_courses FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON academy_labs FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON pet_projects FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON mental_laws FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON rationality_books FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "allow_all" ON coach_dialogues FOR ALL USING (true) WITH CHECK (true);

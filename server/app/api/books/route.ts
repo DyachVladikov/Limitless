@@ -1,15 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getSupabase,
-  getUserId,
-  pick,
-  serverError,
-  unauthorized,
-} from "@/lib/supabase";
+import { getSupabase, getProfile, pick, serverError } from "@/lib/supabase";
 
-export async function GET(request: NextRequest) {
-  const { supabase, token } = getSupabase(request);
-  if (!token) return unauthorized();
+export async function GET() {
+  const supabase = getSupabase();
 
   const { data, error } = await supabase
     .from("rationality_books")
@@ -21,15 +14,16 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { supabase, token } = getSupabase(request);
-  if (!token) return unauthorized();
+  const supabase = getSupabase();
 
-  const userId = await getUserId(supabase, token);
-  if (!userId) return unauthorized();
+  const profile = await getProfile(supabase);
+  if (!profile) {
+    return NextResponse.json({ error: "Профиль не найден" }, { status: 404 });
+  }
 
   const body = await request.json();
   const book = {
-    user_id: userId,
+    user_id: profile.id,
     ...pick(body, ["title", "total_pages"]),
   };
 

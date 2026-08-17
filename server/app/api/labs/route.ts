@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabase, pick, serverError, unauthorized } from "@/lib/supabase";
+import { getSupabase, pick, serverError } from "@/lib/supabase";
 
 export async function GET(request: NextRequest) {
-  const { supabase, token } = getSupabase(request);
-  if (!token) return unauthorized();
+  const supabase = getSupabase();
 
   const courseId = new URL(request.url).searchParams.get("course_id");
 
@@ -17,8 +16,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { supabase, token } = getSupabase(request);
-  if (!token) return unauthorized();
+  const supabase = getSupabase();
 
   const body = await request.json();
   const lab = pick(body, ["course_id", "title", "deadline"]);
