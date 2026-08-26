@@ -16,53 +16,30 @@ Thin – 100
 */
 
 :root {
+  /* ============================================================
+     БАЗА — используется на ВСЕХ страницах
+     ============================================================ */
+
   --color-white: #ffffff;
   --color-black: #111111;
 
-  --color-white-transparent-05: rgba(255, 255, 255, 0.05);
-  --color-white-transparent-10: rgba(255, 255, 255, 0.1);
-  --color-white-transparent-20: rgba(255, 255, 255, 0.2);
-  --color-white-transparent-30: rgba(255, 255, 255, 0.3);
+  --color-gray-08: #141414; /* Фон хедера при скролле */
+  --color-gray-60: #999999; /* Вторичный текст */
 
-  --color-gray-08: #141414;
-  --color-gray-10: #1a1a1a;
-  --color-gray-15: #262626;
-  --color-gray-20: #333333;
-  --color-gray-30: #4d4d4d;
-  --color-gray-40: #666666;
-  --color-gray-50: #808080;
-  --color-gray-60: #999999;
-  --color-gray-80: #cccccc;
+  --color-white-transparent-10: rgba(255, 255, 255, 0.1); /* Базовая обводка */
 
-  --color-error: #ab052c;
-
-  --bg-primary: var(--color-black);
-  --bg-card: var(--color-white-transparent-05);
-  --bg-card-hover: var(--color-white-transparent-10);
-
-  --text-primary: var(--color-white);
-  --text-secondary: var(--color-gray-60);
+  --color-error: #ab052c; /* Ошибки форм */
 
   --btn-primary-bg: var(--color-gray-08);
   --btn-primary-text: var(--color-white);
-  --btn-secondary-bg: transparent;
-  --btn-secondary-border: var(--color-gray-08);
 
-  --glow-primary: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(0, 0, 0, 0) 70%
-  );
   --gradient-card: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.08) 0%,
     rgba(255, 255, 255, 0.02) 100%
-  );
+  ); /* Заливка карточек поверх фона страницы */
 
   --border: 1px solid var(--color-white-transparent-10);
-  --border-hover: 1px solid var(--color-white-transparent-30);
-  --border-large: 2px solid rgba(255, 255, 255, 0.27);
-  --border-small: 1px solid rgba(255, 255, 255, 0.15);
 
   --border-radius-xl: 100px; /* Для кнопок и бейджиков */
   --border-radius-l: 32px; /* Для крупных секций */
@@ -105,8 +82,8 @@ Thin – 100
   --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ============================================================
-   Палитра «Neon Space» — ТОЛЬКО для страницы Dashboard
-   (макет gamified-dashboard v3: космос + неоновый фиолет)
+   Палитра «Neon Space» — ТОЛЬКО для страницы Dashboard (/)
+   Космос + неоновый фиолет. Акцент хедера: #9b5de5
    ============================================================ */
 
   /* --- Фоны: от самого глубокого космоса к карточкам --- */
@@ -181,4 +158,196 @@ Thin – 100
     0.72
   ); /* Плотное стекло — модалка Годжо */
   --dashboard-backdrop-blur: blur(20px); /* Для backdrop-filter */
+
+  /* --- Тёмная аура: поверхности, дым, свечение персонажа --- */
+  --dashboard-bg-card: linear-gradient(
+    180deg,
+    rgba(14, 11, 27, 0.88) 0%,
+    rgba(7, 6, 16, 0.94) 100%
+  ); /* Поверхность карточек дашборда */
+  --dashboard-border-subtle: 1px solid rgba(139, 92, 246, 0.22); /* Приглушённая обводка карточек */
+  --dashboard-aura-hero: rgba(
+    124,
+    58,
+    237,
+    0.32
+  ); /* Аура под персонажем в карточке профиля */
+  --dashboard-smoke: rgba(
+    88,
+    60,
+    160,
+    0.3
+  ); /* Тёмная дымка — фон страницы и углы карточек */
+
+  /* ============================================================
+   Палитра «Dark Ruby» — страница Rationality (/rationality)
+   Почти чёрная, рубиново-красный + стальной серый. Акцент хедера: #e63946
+   ============================================================ */
+
+  /* --- Фоны: тёмный пепел с тёплым подтоном --- */
+  --rationality-ash-950: #0a090a; /* Самый тёмный — края страницы */
+  --rationality-ash-900: #100d0e; /* Основной фон страницы */
+  --rationality-ash-800: #181314; /* Фон крупных секций */
+  --rationality-ash-700: #221a1c; /* Приподнятые элементы внутри секций */
+
+  /* --- Рубиновый неон: главный акцент --- */
+  --rationality-ruby-neon: #e63946; /* База: активные состояния, грани */
+  --rationality-ruby-bright: #ff5964; /* Яркий: ноды, иконки, блики */
+  --rationality-ruby-deep: #9d1c28; /* Тёмный: низ градиентов, глубокое свечение */
+  --rationality-ruby-soft: #f4a3ab; /* Светлый: значения, подписи на тёмном */
+
+  /* --- Стальной серый: второй акцент --- */
+  --rationality-gray-steel: #8d9299; /* Вторичные иконки, холодные детали */
+
+  /* --- Текст --- */
+  --rationality-text-glow: #f5eef0; /* Заголовки — белый с тёплым подтоном */
+  --rationality-text-muted: #9a8f94; /* Вторичный текст — серо-розоватый */
+
+  /* --- Свечения (box-shadow) --- */
+  --rationality-glow-ruby-sm: 0 0 12px rgba(230, 57, 70, 0.45); /* Ноды, иконки */
+  --rationality-glow-ruby-md: 0 0 24px rgba(230, 57, 70, 0.35); /* Активные элементы */
+  --rationality-glow-ruby-lg: 0 0 60px rgba(157, 28, 40, 0.3); /* Крупные карточки */
+  --rationality-glow-text: 0 0 16px rgba(255, 89, 100, 0.55); /* text-shadow для цифр */
+
+  /* --- Градиенты --- */
+  --rationality-gradient-progress: linear-gradient(
+    90deg,
+    var(--rationality-ruby-deep) 0%,
+    var(--rationality-ruby-bright) 100%
+  ); /* Прогресс-бары */
+  --rationality-gradient-button: linear-gradient(
+    135deg,
+    var(--rationality-ruby-deep) 0%,
+    var(--rationality-ruby-neon) 100%
+  ); /* Кнопки */
+  --rationality-glow-space: radial-gradient(
+    circle at 30% 20%,
+    rgba(230, 57, 70, 0.12) 0%,
+    rgba(10, 9, 10, 0) 60%
+  ); /* Фоновое свечение страницы */
+
+  /* --- Границы --- */
+  --rationality-border-neon: 4px solid rgba(230, 57, 70, 0.35); /* Обводка карточек */
+  --rationality-border-neon-hover: 4px solid rgba(255, 89, 100, 0.65); /* При наведении */
+
+  /* --- Стекло (glassmorphism) --- */
+  --rationality-bg-glass: rgba(230, 57, 70, 0.05); /* Лёгкая заливка карточек */
+  --rationality-bg-glass-strong: rgba(
+    24,
+    19,
+    20,
+    0.72
+  ); /* Плотное стекло — модалки */
+
+  /* ============================================================
+   Палитра «Jin Woo Blue» — страница Sport (/do-it)
+   Глубокая ночь + синий электрик. Акцент хедера: #3a86ff
+   ============================================================ */
+
+  /* --- Фоны: глубокая синяя ночь --- */
+  --sport-night-950: #030710; /* Самый тёмный — края страницы */
+  --sport-night-900: #060d1d; /* Основной фон страницы */
+  --sport-night-800: #0b1730; /* Фон крупных секций */
+  --sport-night-700: #122144; /* Приподнятые элементы внутри секций */
+
+  /* --- Синий неон: главный акцент --- */
+  --sport-blue-neon: #3a86ff; /* База: активные состояния, грани */
+  --sport-blue-bright: #6ab0ff; /* Яркий: ноды, иконки, блики */
+  --sport-blue-deep: #1e40af; /* Тёмный: низ градиентов, глубокое свечение */
+  --sport-blue-soft: #bcd6ff; /* Светлый: значения, подписи на тёмном */
+
+  /* --- Ледяной циан: мелкие блики --- */
+  --sport-cyan-ice: #7dd3fc; /* Самые холодные детали */
+
+  /* --- Текст --- */
+  --sport-text-glow: #e8f1ff; /* Заголовки — белый с синим подтоном */
+  --sport-text-muted: #8ea3c9; /* Вторичный текст — серо-голубой */
+
+  /* --- Свечения (box-shadow) --- */
+  --sport-glow-blue-sm: 0 0 12px rgba(58, 134, 255, 0.45); /* Ноды, иконки */
+  --sport-glow-blue-md: 0 0 24px rgba(58, 134, 255, 0.35); /* Активные элементы */
+  --sport-glow-blue-lg: 0 0 60px rgba(30, 64, 175, 0.35); /* Крупные карточки */
+  --sport-glow-text: 0 0 16px rgba(106, 176, 255, 0.55); /* text-shadow для цифр */
+
+  /* --- Градиенты --- */
+  --sport-gradient-progress: linear-gradient(
+    90deg,
+    var(--sport-blue-deep) 0%,
+    var(--sport-blue-bright) 100%
+  ); /* Прогресс-бары */
+  --sport-gradient-button: linear-gradient(
+    135deg,
+    var(--sport-blue-deep) 0%,
+    var(--sport-blue-neon) 100%
+  ); /* Кнопки */
+  --sport-glow-space: radial-gradient(
+    circle at 30% 20%,
+    rgba(58, 134, 255, 0.14) 0%,
+    rgba(3, 7, 16, 0) 60%
+  ); /* Фоновое свечение страницы */
+
+  /* --- Границы --- */
+  --sport-border-neon: 4px solid rgba(58, 134, 255, 0.35); /* Обводка карточек */
+  --sport-border-neon-hover: 4px solid rgba(106, 176, 255, 0.65); /* При наведении */
+
+  /* --- Стекло (glassmorphism) --- */
+  --sport-bg-glass: rgba(58, 134, 255, 0.06); /* Лёгкая заливка карточек */
+  --sport-bg-glass-strong: rgba(
+    11,
+    23,
+    48,
+    0.72
+  ); /* Плотное стекло — модалки */
+
+  /* ============================================================
+   Палитра «Neon Emerald» — страница Work (/work)
+   Тёмный лес + изумрудно-мятный неон. Акцент хедера: #06d6a0
+   ============================================================ */
+
+  /* --- Фоны: тёмный хвойный --- */
+  --work-forest-950: #030a08; /* Самый тёмный — края страницы */
+  --work-forest-900: #071410; /* Основной фон страницы */
+  --work-forest-800: #0b201a; /* Фон крупных секций */
+  --work-forest-700: #112c23; /* Приподнятые элементы внутри секций */
+
+  /* --- Изумрудный неон: главный акцент --- */
+  --work-emerald-neon: #06d6a0; /* База: активные состояния, грани */
+  --work-emerald-bright: #3ee6b5; /* Яркий: ноды, иконки, блики */
+  --work-emerald-deep: #047857; /* Тёмный: низ градиентов, глубокое свечение */
+  --work-emerald-soft: #a7f3d0; /* Светлый: значения, подписи на тёмном */
+
+  /* --- Текст --- */
+  --work-text-glow: #e9fff7; /* Заголовки — белый с мятным подтоном */
+  --work-text-muted: #8fb5a8; /* Вторичный текст — серо-зелёный */
+
+  /* --- Свечения (box-shadow) --- */
+  --work-glow-emerald-sm: 0 0 12px rgba(6, 214, 160, 0.45); /* Ноды, иконки */
+  --work-glow-emerald-md: 0 0 24px rgba(6, 214, 160, 0.35); /* Активные элементы */
+  --work-glow-emerald-lg: 0 0 60px rgba(4, 120, 87, 0.35); /* Крупные карточки */
+  --work-glow-text: 0 0 16px rgba(62, 230, 181, 0.55); /* text-shadow для цифр */
+
+  /* --- Градиенты --- */
+  --work-gradient-progress: linear-gradient(
+    90deg,
+    var(--work-emerald-deep) 0%,
+    var(--work-emerald-bright) 100%
+  ); /* Прогресс-бары */
+  --work-gradient-button: linear-gradient(
+    135deg,
+    var(--work-emerald-deep) 0%,
+    var(--work-emerald-neon) 100%
+  ); /* Кнопки */
+  --work-glow-space: radial-gradient(
+    circle at 30% 20%,
+    rgba(6, 214, 160, 0.12) 0%,
+    rgba(3, 10, 8, 0) 60%
+  ); /* Фоновое свечение страницы */
+
+  /* --- Границы --- */
+  --work-border-neon: 4px solid rgba(6, 214, 160, 0.35); /* Обводка карточек */
+  --work-border-neon-hover: 4px solid rgba(62, 230, 181, 0.65); /* При наведении */
+
+  /* --- Стекло (glassmorphism) --- */
+  --work-bg-glass: rgba(6, 214, 160, 0.06); /* Лёгкая заливка карточек */
+  --work-bg-glass-strong: rgba(11, 32, 26, 0.72); /* Плотное стекло — модалки */
 }

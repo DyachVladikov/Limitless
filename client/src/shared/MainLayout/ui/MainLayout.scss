@@ -10,10 +10,132 @@
     content: "";
     position: fixed;
     inset: 0;
+    z-index: -3;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(5, 5, 13, 0.62) 0%,
+        rgba(5, 5, 13, 0.7) 45%,
+        rgba(5, 5, 13, 0.82) 100%
+      ),
+      url("/backgrounds/HomePage.png") center / cover no-repeat;
+  }
+
+  &::after {
+    content: "";
+    position: fixed;
+    inset: -15%;
     z-index: -1;
-    background: url("/backgrounds/HomePage.png") center / cover no-repeat;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        ellipse 42% 34% at 22% 30%,
+        rgba(88, 60, 160, 0.08) 0%,
+        transparent 68%
+      ),
+      radial-gradient(
+        ellipse 38% 30% at 78% 72%,
+        rgba(54, 38, 110, 0.1) 0%,
+        transparent 68%
+      );
+    filter: blur(30px);
+    animation: app-smoke-drift 36s ease-in-out infinite alternate;
+  }
+
+  &__stars {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow:
+      6vw 12vh #cfd2ff,
+      14vw 68vh #8f95c9,
+      21vw 34vh #ffffff,
+      29vw 82vh #7c81b8,
+      35vw 9vh #dfe2ff,
+      42vw 51vh #9aa0d0,
+      48vw 25vh #ffffff,
+      55vw 74vh #8287bd,
+      61vw 15vh #d4d7ff,
+      67vw 44vh #9398c8,
+      73vw 88vh #ffffff,
+      79vw 30vh #767bb0,
+      85vw 58vh #e6e8ff,
+      91vw 10vh #a3a8d6,
+      12vw 90vh #ffffff,
+      26vw 55vh #b9bde8,
+      38vw 38vh #6f74a8,
+      52vw 62vh #ffffff,
+      63vw 78vh #aeb3e0,
+      77vw 48vh #868bc0,
+      88vw 82vh #f2f3ff,
+      9vw 44vh #9ea3d4,
+      33vw 70vh #ffffff,
+      58vw 5vh #c3c7f0,
+      95vw 38vh #8b90c4;
+    animation: app-stars-twinkle 4.5s ease-in-out infinite;
+  }
+
+  &__stars--far {
+    width: 1px;
+    height: 1px;
+    opacity: 0.7;
+    box-shadow:
+      4vw 30vh #8f95c9,
+      11vw 52vh #ffffff,
+      18vw 78vh #767bb0,
+      24vw 18vh #dfe2ff,
+      31vw 47vh #8287bd,
+      39vw 84vh #ffffff,
+      45vw 28vh #9aa0d0,
+      51vw 66vh #6f74a8,
+      57vw 40vh #ffffff,
+      64vw 92vh #aeb3e0,
+      70vw 22vh #868bc0,
+      76vw 60vh #ffffff,
+      83vw 36vh #b9bde8,
+      89vw 70vh #7c81b8,
+      94vw 16vh #ffffff,
+      16vw 8vh #c3c7f0,
+      36vw 60vh #9398c8,
+      49vw 88vh #ffffff,
+      68vw 50vh #8b90c4,
+      81vw 6vh #dfe2ff,
+      97vw 55vh #9ea3d4,
+      7vw 74vh #ffffff,
+      43vw 12vh #767bb0,
+      59vw 81vh #cfd2ff,
+      74vw 94vh #ffffff;
+    animation: app-stars-twinkle 6s ease-in-out infinite reverse;
   }
 }
+
 .main {
   flex-grow: 1;
+}
+
+@keyframes app-smoke-drift {
+  0% {
+    transform: translate3d(-2.5%, -1.5%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(1.5%, 2%, 0) scale(1.06);
+  }
+  100% {
+    transform: translate3d(2.5%, -1%, 0) scale(1.02);
+  }
+}
+
+@keyframes app-stars-twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
 }

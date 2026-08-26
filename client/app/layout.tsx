@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "@/app/styles/globals.scss";
-import { Footer, Header } from "@/widgests";
+import { Footer, Header } from "@/widgets";
 import { MainLayout } from "@/shared/MainLayout";
 import { StoreProvider, QueryProvider } from "@/app/providers";
 

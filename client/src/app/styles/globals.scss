@@ -136,6 +136,18 @@ fieldset:disabled {
 fieldset {
   border: none;
 }
+.widget {
+  border-radius: var(--border-radius-m);
+  background: var(--dashboard-bg-glass-strong);
+  -webkit-backdrop-filter: var(--dashboard-backdrop-blur);
+  backdrop-filter: var(--dashboard-backdrop-blur);
+  border: 1px solid #8b5cf659;
+  flex-direction: column;
+  row-gap: 18px;
+  padding: 24px;
+  display: flex;
+  height: 100%;
+}
 
 /*   * {
     outline: 1px solid white !important;

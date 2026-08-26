@@ -1,3 +1,3 @@
-import { WorkPage } from "@/views/ui";
+import { WorkPage } from "@/views";
 
 export default WorkPage;

@@ -13,6 +13,8 @@ export const MainLayout = (props: MainLayoutProps) => {
 
   return (
     <div className="app-wrapper">
+      <span className="app-wrapper__stars" />
+      <span className="app-wrapper__stars app-wrapper__stars--far" />
       {header}
       <main className="main container">{content}</main>
       {footer}

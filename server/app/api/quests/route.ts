@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getSupabase, getProfile, serverError } from "@/lib/supabase";
 import { mapQuest } from "@/lib/mappers";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const supabase = getSupabase();
 
   const profile = await getProfile(supabase);
@@ -28,7 +28,24 @@ export async function GET() {
     progressRows.map((row) => [row.quest_id, row]),
   );
 
-  return NextResponse.json(
-    quests.map((quest) => mapQuest(quest, progressByQuest.get(quest.id))),
+  const mapped = quests.map((quest) =>
+    mapQuest(quest, progressByQuest.get(quest.id)),
   );
+
+  const limit = Number(new URL(request.url).searchParams.get("limit"));
+
+  if (limit > 0) {
+    const closest = mapped
+      .filter((quest) => !quest.isCompleted)
+      .sort(
+        (a, b) =>
+          b.progress / b.targetCount - a.progress / a.targetCount ||
+          b.exp - a.exp,
+      )
+      .slice(0, limit);
+
+    return NextResponse.json(closest);
+  }
+
+  return NextResponse.json(mapped);
 }

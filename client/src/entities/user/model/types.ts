@@ -20,6 +20,7 @@ type stats = {
 };
 
 type level = {
+  currentLevel: number;
   currentExp: number;
   expToNextLevel: number;
   totalExp: number;

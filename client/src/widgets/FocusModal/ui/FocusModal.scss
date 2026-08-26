@@ -1,0 +1,23 @@
+.focus-modal {
+  width: 450px;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-secondary);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dashboard-text-glow);
+
+    &-diamond {
+      width: 8px;
+      height: 8px;
+      transform: rotate(45deg);
+      background: var(--dashboard-violet-neon);
+      box-shadow: var(--dashboard-glow-violet-sm);
+    }
+  }
+}

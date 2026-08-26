@@ -1,0 +1,325 @@
+.stats-radar {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--border-radius-m);
+  border: var(--dashboard-border-subtle);
+  padding: 28px 32px;
+  background: var(--dashboard-bg-card);
+  backdrop-filter: var(--dashboard-backdrop-blur);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--dashboard-text-glow);
+    font-family: var(--font-secondary);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+
+    &-diamond {
+      width: 8px;
+      height: 8px;
+      transform: rotate(45deg);
+      background: var(--dashboard-violet-neon);
+      box-shadow: var(--dashboard-glow-violet-sm);
+    }
+
+    svg {
+      color: var(--dashboard-text-muted);
+    }
+  }
+
+  &__power {
+    padding: 6px 14px;
+    border-radius: var(--border-radius-xl);
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    background: rgba(139, 92, 246, 0.07);
+    color: var(--dashboard-violet-soft);
+    font-family: var(--font-secondary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  &__chart {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    margin: auto;
+    container-type: inline-size;
+  }
+
+  &__haze {
+    position: absolute;
+    inset: 6% 10%;
+    border-radius: 50%;
+    background:
+      radial-gradient(
+        circle at 38% 42%,
+        rgba(88, 60, 160, 0.16) 0%,
+        transparent 62%
+      ),
+      radial-gradient(
+        circle at 64% 60%,
+        rgba(54, 38, 110, 0.2) 0%,
+        transparent 66%
+      );
+    filter: blur(34px);
+    animation: radar-haze-drift 16s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+
+  &__sweep {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 52.4%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 268deg,
+      rgba(139, 92, 246, 0.2) 332deg,
+      transparent 360deg
+    );
+    filter: blur(5px);
+    animation: radar-sweep-spin 7s linear infinite;
+    pointer-events: none;
+  }
+
+  &__orbit {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 60.7%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px dashed rgba(167, 139, 250, 0.28);
+    animation: radar-orbit-spin 46s linear infinite;
+    pointer-events: none;
+  }
+
+  &__svg {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  &__labels {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  &__badge {
+    position: absolute;
+    width: 7.7cqw;
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(10, 8, 20, 0.62);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(167, 139, 250, 0.45);
+      animation: radar-badge-spin 26s linear infinite;
+    }
+  }
+
+  &__icon {
+    font-size: 3.1cqw;
+    color: var(--dashboard-violet-bright);
+    filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.55));
+  }
+
+  &__label {
+    position: absolute;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.15em;
+
+    &--left {
+      transform: translate(-100%, -50%);
+      align-items: flex-end;
+      text-align: right;
+    }
+  }
+
+  &__name {
+    font-family: var(--font-secondary);
+    font-size: 1.9cqw;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dashboard-text-muted);
+    white-space: nowrap;
+  }
+
+  &__value {
+    font-family: var(--font-secondary);
+    font-size: 3.5cqw;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--dashboard-text-glow);
+    text-shadow: 0 0 12px rgba(139, 92, 246, 0.5);
+  }
+
+  &__ring {
+    fill: none;
+    stroke: rgba(139, 92, 246, 0.22);
+    stroke-width: 1;
+
+    &--outer {
+      stroke: rgba(167, 139, 250, 0.42);
+      stroke-width: 1.5;
+    }
+  }
+
+  &__axis {
+    stroke: rgba(139, 92, 246, 0.2);
+    stroke-width: 1;
+  }
+
+  &__tick {
+    fill: rgba(167, 139, 250, 0.4);
+  }
+
+  &__vertex {
+    fill: var(--dashboard-violet-soft);
+    opacity: 0.75;
+  }
+
+  &__polygon {
+    fill: url(#radar-fill);
+    fill-opacity: 0;
+    stroke: var(--dashboard-violet-bright);
+    stroke-width: 2.25;
+    stroke-linejoin: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    filter: url(#radar-glow);
+    animation:
+      radar-polygon-draw 1.4s ease-out forwards,
+      radar-polygon-fill 0.9s ease 0.85s forwards;
+  }
+
+  &__dot {
+    fill: var(--dashboard-text-glow);
+    filter: url(#radar-glow);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: radar-dot-pulse 2.6s ease-in-out infinite;
+  }
+
+  &__core {
+    fill: var(--dashboard-violet-bright);
+    filter: url(#radar-glow);
+    animation: radar-core-pulse 3.2s ease-in-out infinite;
+  }
+
+  &__core-outer {
+    fill: rgba(139, 92, 246, 0.12);
+    stroke: rgba(167, 139, 250, 0.3);
+    stroke-width: 1;
+    stroke-dasharray: 3 5;
+    animation: radar-core-spin 26s linear infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+}
+
+@keyframes radar-sweep-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes radar-orbit-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
+
+@keyframes radar-badge-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes radar-polygon-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes radar-polygon-fill {
+  to {
+    fill-opacity: 1;
+  }
+}
+
+@keyframes radar-dot-pulse {
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes radar-haze-drift {
+  from {
+    transform: translate3d(-3%, -2%, 0) scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: translate3d(3%, 2.5%, 0) scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes radar-core-pulse {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes radar-core-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

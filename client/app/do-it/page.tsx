@@ -1,3 +1,3 @@
-import { DoItPage } from "@/views/ui";
+import { DoItPage } from "@/views";
 
 export default DoItPage;

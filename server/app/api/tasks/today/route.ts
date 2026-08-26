@@ -28,7 +28,7 @@ export async function GET() {
 
   const { data: allTasks, error: tasksError } = await supabase
     .from("tasks")
-    .select("id, category, days_of_week");
+    .select("id, category, days_of_week, is_priority");
 
   if (tasksError) return serverError(tasksError);
 
@@ -40,8 +40,7 @@ export async function GET() {
   );
 
   const priority = available.filter(
-    (task) =>
-      task.category === "sport" && task.days_of_week?.includes(todayWeekday),
+    (task) => task.is_priority && task.days_of_week?.includes(todayWeekday),
   );
 
   const rest = available.filter((task) => !priority.includes(task));

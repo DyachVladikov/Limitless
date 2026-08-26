@@ -1,3 +1,3 @@
-import { RationalityPage } from "@/views/ui";
+import { RationalityPage } from "@/views";
 
 export default RationalityPage;

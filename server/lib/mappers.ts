@@ -18,6 +18,7 @@ export function mapProfile(row: Record<string, any>) {
     },
     streak: row.streak,
     level: {
+      currentLevel: row.current_level,
       currentExp: row.current_exp,
       expToNextLevel,
       totalExp: row.total_exp,

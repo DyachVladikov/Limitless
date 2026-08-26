@@ -16,6 +16,7 @@ const initialState: User = {
   },
   streak: 0,
   level: {
+    currentLevel: 1,
     currentExp: 0,
     expToNextLevel: 100,
     totalExp: 0,

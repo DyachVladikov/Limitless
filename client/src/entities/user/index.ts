@@ -1,3 +1,3 @@
-export { UserApi } from "./api/userApi";
+export { useUser } from "./api/userApi";
 
 export type { User } from "./model/types";
