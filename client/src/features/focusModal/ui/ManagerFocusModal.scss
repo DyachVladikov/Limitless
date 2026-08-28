@@ -1,0 +1,46 @@
+.focus-toggle {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid rgba(167, 139, 250, 0.5);
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(139, 92, 246, 0.4) 0%,
+    rgba(76, 29, 149, 0.28) 75%
+  );
+  color: var(--dashboard-violet-soft);
+  font-size: 17px;
+  cursor: pointer;
+  box-shadow:
+    0 0 20px rgba(139, 92, 246, 0.42),
+    inset 0 0 14px rgba(139, 92, 246, 0.25);
+  transition:
+  transform var(--transition-duration) var(--transition-easing),
+    box-shadow var(--transition-duration) var(--transition-easing);
+
+  &:hover {
+    transform: scale(1.07);
+    box-shadow:
+      0 0 30px rgba(139, 92, 246, 0.6),
+      inset 0 0 16px rgba(139, 92, 246, 0.35);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &__play-icon {
+    margin-left: 2px;
+  }
+
+  &--mini {
+    width: 34px;
+    height: 34px;
+    font-size: 11px;
+  }
+}

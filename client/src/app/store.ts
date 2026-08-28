@@ -1,9 +1,9 @@
-import UserReducer from "@/entities/user/model/userSlice";
+import focusModalReducer from "@/features/focusModal/model/FocusModalSlice";
 import { configureStore } from "@reduxjs/toolkit";
 
 export const store = configureStore({
   reducer: {
-    user: UserReducer,
+    focusModal: focusModalReducer,
   },
 });
 

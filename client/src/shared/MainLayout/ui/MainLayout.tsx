@@ -1,6 +1,7 @@
 import "./MainLayout.scss";
 
 import type { ReactNode } from "react";
+import { FocusMini } from "@/widgets/FocusMini";
 
 interface MainLayoutProps {
   header: ReactNode;
@@ -16,6 +17,7 @@ export const MainLayout = (props: MainLayoutProps) => {
       <span className="app-wrapper__stars" />
       <span className="app-wrapper__stars app-wrapper__stars--far" />
       {header}
+      <FocusMini />
       <main className="main container">{content}</main>
       {footer}
     </div>
