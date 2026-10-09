@@ -116,6 +116,17 @@
 
 .main {
   flex-grow: 1;
+  position: relative;
+
+  .dev-mode {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    z-index: 1000;
+  }
 }
 
 @keyframes app-smoke-drift {
