@@ -1,0 +1,46 @@
+%% Proposed schema only; not a migration or a deployed-schema snapshot.
+%% Arrows run from referenced entity (one) to referencing entity (many).
+%% profiles has no user_id foreign-key relationships in this single-user app.
+flowchart TB
+    subgraph core["Ядро"]
+        profiles["Профиль<br/>profiles"]
+        tasks["Дейлики<br/>tasks"]
+        quests["Квесты<br/>quests"]
+        focus_sessions["Фокус<br/>focus_sessions"]
+        mentors["Менторы<br/>mentors"]
+    end
+    subgraph sport["Спорт"]
+        workout_programs["Программы<br/>workout_programs"]
+        exercises["Упражнения<br/>exercises"]
+        program_exercises["Состав программ<br/>program_exercises"]
+        workouts["Посещения зала / волейбола<br/>workouts"]
+        workout_exercises["Результаты упражнений<br/>workout_exercises"]
+    end
+    subgraph food["Питание"]
+        dishes["Блюда<br/>dishes"]
+        nutrition_entries["Питание сегодня<br/>nutrition_entries"]
+    end
+    subgraph study["Учёба"]
+        subjects["Предметы<br/>subjects"]
+        lab_works["Лабораторные<br/>lab_works"]
+    end
+    subgraph work["Работа"]
+        coding_tasks["Задачи LeetCode<br/>coding_tasks"]
+    end
+    subgraph mind["Рациональность"]
+        knowledge_entries["Справочник<br/>knowledge_entries"]
+        books["Книги<br/>books"]
+        scenarios["Ситуации<br/>scenarios"]
+    end
+
+    workout_programs -->|"1:N"| program_exercises
+    exercises -->|"1:N"| program_exercises
+    workout_programs -->|"1:N · только для зала"| workouts
+    workouts -->|"1:N"| workout_exercises
+    exercises -->|"1:N"| workout_exercises
+    dishes -->|"1:N · кроме ручного ввода"| nutrition_entries
+    subjects -->|"1:N"| lab_works
+
+%% Для зала программа обязательна; у волейбола её нет.
+%% Программа нужна только для зала; ручное питание не связано с блюдом.
+%% XP and stats are changed by backend operations, not profile FKs.

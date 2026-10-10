@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1152" viewBox="0 0 1920 1152" role="img" aria-labelledby="title desc">
+<title id="title">Проект схемы данных Limitless — 18 сущностей</title>
+<desc id="desc">Таблицы сгруппированы по разделам: ядро, спорт, питание, учёба, работа и рациональность. Показаны семь реальных связей внешних ключей 1:N. Внешних ключей к профилю нет. Это проект будущей схемы, не применённая база данных.</desc>
+<rect x="0" y="0" width="1920" height="1152" rx="0" fill="#F3F6FA" stroke="none" stroke-width="1.4"/>
+<text x="48" y="69" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" text-anchor="start">Limitless · Схема данных</text>
+<text x="50" y="105" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="start">18 сущностей · 6 разделов · 7 связей FK</text>
+<rect x="1538" y="40" width="334" height="42" rx="21" fill="#E8EEF6" stroke="none" stroke-width="1.4"/>
+<text x="1705" y="68" fill="#415976" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="middle">Проект будущей схемы</text>
+<rect x="48" y="132" width="1824" height="164" rx="20" fill="#FFFFFF" stroke="#DCE5EF" stroke-width="1.4"/>
+<rect x="76" y="156" width="5" height="24" rx="2" fill="#6C59BB" stroke="none" stroke-width="1.4"/>
+<text x="94" y="176" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="start">Ядро</text>
+<text x="1844" y="175" fill="#6C59BB" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="end">5</text>
+<rect x="80" y="190" width="336" height="78" rx="12" fill="#F5F2FC" stroke="#D9D0EF" stroke-width="1.4"/>
+<text x="248.0" y="226.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Профиль</text>
+<text x="248.0" y="253.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">profiles</text>
+<rect x="436" y="190" width="336" height="78" rx="12" fill="#F5F2FC" stroke="#D9D0EF" stroke-width="1.4"/>
+<text x="604.0" y="226.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Дейлики</text>
+<text x="604.0" y="253.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">tasks</text>
+<rect x="792" y="190" width="336" height="78" rx="12" fill="#F5F2FC" stroke="#D9D0EF" stroke-width="1.4"/>
+<text x="960.0" y="226.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Квесты</text>
+<text x="960.0" y="253.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">quests</text>
+<rect x="1148" y="190" width="336" height="78" rx="12" fill="#F5F2FC" stroke="#D9D0EF" stroke-width="1.4"/>
+<text x="1316.0" y="226.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Фокус</text>
+<text x="1316.0" y="253.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">focus_sessions</text>
+<rect x="1504" y="190" width="336" height="78" rx="12" fill="#F5F2FC" stroke="#D9D0EF" stroke-width="1.4"/>
+<text x="1672.0" y="226.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Менторы</text>
+<text x="1672.0" y="253.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">mentors</text>
+<rect x="48" y="320" width="900" height="612" rx="20" fill="#FFFFFF" stroke="#DCE5EF" stroke-width="1.4"/>
+<rect x="76" y="344" width="5" height="24" rx="2" fill="#2870B4" stroke="none" stroke-width="1.4"/>
+<text x="94" y="364" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="start">Спорт</text>
+<text x="920" y="363" fill="#2870B4" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="end">5</text>
+<rect x="972" y="320" width="438" height="256" rx="20" fill="#FFFFFF" stroke="#DCE5EF" stroke-width="1.4"/>
+<rect x="1000" y="344" width="5" height="24" rx="2" fill="#267B69" stroke="none" stroke-width="1.4"/>
+<text x="1018" y="364" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="start">Питание</text>
+<text x="1382" y="363" fill="#267B69" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="end">2</text>
+<rect x="1434" y="320" width="438" height="256" rx="20" fill="#FFFFFF" stroke="#DCE5EF" stroke-width="1.4"/>
+<rect x="1462" y="344" width="5" height="24" rx="2" fill="#AB6B29" stroke="none" stroke-width="1.4"/>
+<text x="1480" y="364" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="start">Учёба</text>
+<text x="1844" y="363" fill="#AB6B29" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="end">2</text>
+<rect x="972" y="600" width="900" height="140" rx="20" fill="#FFFFFF" stroke="#DCE5EF" stroke-width="1.4"/>
+<rect x="972" y="764" width="900" height="168" rx="20" fill="#FFFFFF" stroke="#DCE5EF" stroke-width="1.4"/>
+<rect x="1000" y="788" width="5" height="24" rx="2" fill="#4F7383" stroke="none" stroke-width="1.4"/>
+<text x="1018" y="808" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="start">Рациональность</text>
+<text x="1844" y="807" fill="#4F7383" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="end">3</text>
+<polyline points="353,480 353,526 436,526 436,558" fill="none" stroke="#487698" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="436,558 441.0,547.0 431.0,547.0" fill="#487698"/>
+<polyline points="645,480 645,526 580,526 580,558" fill="none" stroke="#487698" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="580,558 585.0,547.0 575.0,547.0" fill="#487698"/>
+<polyline points="190,480 190,778" fill="none" stroke="#487698" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="190,778 195.0,767.0 185.0,767.0" fill="#487698"/>
+<polyline points="840,480 840,778" fill="none" stroke="#487698" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="840,778 845.0,767.0 835.0,767.0" fill="#487698"/>
+<polyline points="428,820 568,820" fill="none" stroke="#487698" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="568,820 557.0,815.0 557.0,825.0" fill="#487698"/>
+<rect x="364" y="506" width="52" height="29" rx="8" fill="#FFFFFF" stroke="none" stroke-width="1.4"/>
+<text x="390" y="527" fill="#487698" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="middle">1:N</text>
+<rect x="588" y="506" width="52" height="29" rx="8" fill="#FFFFFF" stroke="none" stroke-width="1.4"/>
+<text x="614" y="527" fill="#487698" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="middle">1:N</text>
+<rect x="164" y="659" width="52" height="29" rx="8" fill="#FFFFFF" stroke="none" stroke-width="1.4"/>
+<text x="190" y="680" fill="#487698" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="middle">1:N</text>
+<rect x="814" y="659" width="52" height="29" rx="8" fill="#FFFFFF" stroke="none" stroke-width="1.4"/>
+<text x="840" y="680" fill="#487698" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="middle">1:N</text>
+<rect x="472" y="800" width="52" height="29" rx="8" fill="#FFFFFF" stroke="none" stroke-width="1.4"/>
+<text x="498" y="821" fill="#487698" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="middle">1:N</text>
+<rect x="80" y="392" width="348" height="88" rx="12" fill="#F0F6FC" stroke="#BED5EA" stroke-width="1.4"/>
+<text x="254.0" y="433.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Программы</text>
+<text x="254.0" y="460.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">workout_programs</text>
+<rect x="568" y="392" width="348" height="88" rx="12" fill="#F0F6FC" stroke="#BED5EA" stroke-width="1.4"/>
+<text x="742.0" y="433.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Упражнения</text>
+<text x="742.0" y="460.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">exercises</text>
+<rect x="334" y="558" width="348" height="88" rx="12" fill="#F0F6FC" stroke="#BED5EA" stroke-width="1.4"/>
+<text x="508.0" y="599.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Состав программ</text>
+<text x="508.0" y="626.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">program_exercises</text>
+<rect x="80" y="778" width="348" height="88" rx="12" fill="#F0F6FC" stroke="#BED5EA" stroke-width="1.4"/>
+<text x="254.0" y="819.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" text-anchor="middle">Посещения зала / волейбола</text>
+<text x="254.0" y="846.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">workouts</text>
+<rect x="568" y="778" width="348" height="88" rx="12" fill="#F0F6FC" stroke="#BED5EA" stroke-width="1.4"/>
+<text x="742.0" y="819.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Результаты упражнений</text>
+<text x="742.0" y="846.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">workout_exercises</text>
+<text x="80" y="906" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="start">Для зала программа обязательна; у волейбола её нет.</text>
+<polyline points="1191,452 1191,489" fill="none" stroke="#487698" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="1191,489 1196.0,478.0 1186.0,478.0" fill="#487698"/>
+<text x="1230" y="478" fill="#487698" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="start">1:N</text>
+<rect x="1004" y="382" width="374" height="70" rx="12" fill="#F0F8F5" stroke="#BEDFD3" stroke-width="1.4"/>
+<text x="1191.0" y="414.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Блюда</text>
+<text x="1191.0" y="441.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">dishes</text>
+<rect x="1004" y="489" width="374" height="70" rx="12" fill="#F0F8F5" stroke="#BEDFD3" stroke-width="1.4"/>
+<text x="1191.0" y="521.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Питание сегодня</text>
+<text x="1191.0" y="548.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">nutrition_entries</text>
+<polyline points="1653,452 1653,489" fill="none" stroke="#487698" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="1653,489 1658.0,478.0 1648.0,478.0" fill="#487698"/>
+<text x="1692" y="478" fill="#487698" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="start">1:N</text>
+<rect x="1466" y="382" width="374" height="70" rx="12" fill="#FFF8EF" stroke="#ECD4B4" stroke-width="1.4"/>
+<text x="1653.0" y="414.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Предметы</text>
+<text x="1653.0" y="441.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">subjects</text>
+<rect x="1466" y="489" width="374" height="70" rx="12" fill="#FFF8EF" stroke="#ECD4B4" stroke-width="1.4"/>
+<text x="1653.0" y="521.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Лабораторные</text>
+<text x="1653.0" y="548.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">lab_works</text>
+<rect x="1000" y="650" width="5" height="24" rx="2" fill="#7955A2" stroke="none" stroke-width="1.4"/>
+<text x="1018" y="672" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" text-anchor="start">Работа</text>
+<rect x="1204" y="624" width="636" height="92" rx="12" fill="#F7F3FB" stroke="#D9CAE8" stroke-width="1.4"/>
+<text x="1522.0" y="667.0" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle">Задачи LeetCode</text>
+<text x="1522.0" y="694.0" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">coding_tasks</text>
+<rect x="1004" y="823" width="268" height="81" rx="12" fill="#F1F7F9" stroke="#C7DDE4" stroke-width="1.4"/>
+<text x="1138.0" y="860.5" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Справочник</text>
+<text x="1138.0" y="887.5" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">knowledge_entries</text>
+<rect x="1288" y="823" width="268" height="81" rx="12" fill="#F1F7F9" stroke="#C7DDE4" stroke-width="1.4"/>
+<text x="1422.0" y="860.5" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Книги</text>
+<text x="1422.0" y="887.5" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">books</text>
+<rect x="1572" y="823" width="268" height="81" rx="12" fill="#F1F7F9" stroke="#C7DDE4" stroke-width="1.4"/>
+<text x="1706.0" y="860.5" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Ситуации</text>
+<text x="1706.0" y="887.5" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="middle">scenarios</text>
+<rect x="48" y="956" width="1824" height="150" rx="18" fill="#E8EEF5" stroke="none" stroke-width="1.4"/>
+<polyline points="80,992 150,992" fill="none" stroke="#487698" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+<polygon points="150,992 139.0,987.0 139.0,997.0" fill="#487698"/>
+<text x="172" y="1000" fill="#172B46" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="400" text-anchor="start">Сплошная стрелка — реальный внешний ключ (FK), связь 1:N: от одной записи к многим.</text>
+<text x="80" y="1040" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Программа нужна только для зала; ручное питание не связано с блюдом.</text>
+<text x="80" y="1079" fill="#607188" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" text-anchor="start">Один пользователь. XP и статы меняются backend-операциями; внешних ключей к profiles нет.</text>
+</svg>
