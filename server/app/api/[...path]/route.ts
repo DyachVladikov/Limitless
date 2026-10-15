@@ -1,10 +1,12 @@
-import { handleRequest } from '../../../api/router';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-export const GET = handleRequest;
-export const POST = handleRequest;
-export const PATCH = handleRequest;
-export const PUT = handleRequest;
-export const DELETE = handleRequest;
-export const OPTIONS = handleRequest;
-export const HEAD = handleRequest;
+
+export {
+  optionsRequest as OPTIONS,
+  notFoundRequest as GET,
+  notFoundRequest as POST,
+  notFoundRequest as PATCH,
+  notFoundRequest as PUT,
+  notFoundRequest as DELETE,
+  notFoundRequest as HEAD,
+} from '../../../core/system-request';

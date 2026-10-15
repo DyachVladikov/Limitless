@@ -26,7 +26,10 @@ function reserveLogin(): void {
 
 function signingKey(config: OwnerConfiguration): Buffer {
   // Changing either the password hash or SESSION_SECRET revokes all sessions.
-  return createHmac('sha256', config.secret).update('limitless-owner-session-key:v1\0').update(config.passwordHash).digest();
+  return createHmac('sha256', config.secret)
+    .update('limitless-owner-session-key:v1\0')
+    .update(config.passwordHash)
+    .digest();
 }
 
 function sign(payload: string, config: OwnerConfiguration): string {
@@ -35,14 +38,24 @@ function sign(payload: string, config: OwnerConfiguration): string {
 
 function newSession(config: OwnerConfiguration): string {
   const now = Math.floor(Date.now() / 1000);
-  const payload = Buffer.from(JSON.stringify({ sub: 'owner', iat: now, exp: now + SESSION_SECONDS, nonce: randomBytes(16).toString('hex') })).toString('base64url');
+  const payload = Buffer.from(
+    JSON.stringify({
+      sub: 'owner',
+      iat: now,
+      exp: now + SESSION_SECONDS,
+      nonce: randomBytes(16).toString('hex'),
+    }),
+  ).toString('base64url');
   return `v1.${payload}.${sign(payload, config)}`;
 }
 
 function cookieToken(request: Request, config: OwnerConfiguration): string | null {
   const header = request.headers.get('cookie');
   if (!header || header.length > 8192) return null;
-  const matches = header.split(';').map(value => value.trim()).filter(value => value.slice(0, value.indexOf('=')) === config.cookieName);
+  const matches = header
+    .split(';')
+    .map((value) => value.trim())
+    .filter((value) => value.slice(0, value.indexOf('=')) === config.cookieName);
   // Ambiguous duplicate cookies are rejected instead of depending on proxy order.
   return matches.length === 1 ? matches[0].slice(matches[0].indexOf('=') + 1) : null;
 }
@@ -58,12 +71,19 @@ function authenticated(request: Request, config: OwnerConfiguration): boolean {
   try {
     const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
     const now = Math.floor(Date.now() / 1000);
-    return payload?.sub === 'owner'
-      && Number.isSafeInteger(payload.iat) && Number.isSafeInteger(payload.exp)
-      && payload.iat <= now + 30 && payload.exp > now
-      && payload.exp - payload.iat === SESSION_SECONDS
-      && typeof payload.nonce === 'string' && /^[0-9a-f]{32}$/.test(payload.nonce);
-  } catch { return false; }
+    return (
+      payload?.sub === 'owner' &&
+      Number.isSafeInteger(payload.iat) &&
+      Number.isSafeInteger(payload.exp) &&
+      payload.iat <= now + 30 &&
+      payload.exp > now &&
+      payload.exp - payload.iat === SESSION_SECONDS &&
+      typeof payload.nonce === 'string' &&
+      /^[0-9a-f]{32}$/.test(payload.nonce)
+    );
+  } catch {
+    return false;
+  }
 }
 
 function sessionCookie(config: OwnerConfiguration, token: string, expire = false): string {
@@ -73,11 +93,18 @@ function sessionCookie(config: OwnerConfiguration, token: string, expire = false
 }
 
 async function verifyPassword(password: string, config: OwnerConfiguration): Promise<boolean> {
-  if (hashing >= MAX_PARALLEL_HASHES) throw new ApiError(429, 'RATE_LIMITED', 'Too many login attempts; try again later');
+  if (hashing >= MAX_PARALLEL_HASHES)
+    throw new ApiError(429, 'RATE_LIMITED', 'Too many login attempts; try again later');
   hashing++;
   try {
     const candidate = await new Promise<Buffer>((resolve, reject) => {
-      scrypt(password, config.salt, 32, { N: 32768, r: 8, p: 1, maxmem: 64 * 1024 * 1024 }, (error, derived) => error ? reject(error) : resolve(derived));
+      scrypt(
+        password,
+        config.salt,
+        32,
+        { N: 32768, r: 8, p: 1, maxmem: 64 * 1024 * 1024 },
+        (error, derived) => (error ? reject(error) : resolve(derived)),
+      );
     });
     return timingSafeEqual(candidate, config.digest);
   } finally {
@@ -89,7 +116,9 @@ export async function handleAuth(request: Request, path: string): Promise<Respon
   if (!['/auth/login', '/auth/logout', '/auth/session'].includes(path)) return null;
   guardOrigin(request);
   const expectedMethod = path === '/auth/session' ? 'GET' : 'POST';
-  if (request.method !== expectedMethod) throw new ApiError(405, 'METHOD_NOT_ALLOWED', `Use ${expectedMethod} for this endpoint`);
+  const sessionHead = path === '/auth/session' && request.method === 'HEAD';
+  if (request.method !== expectedMethod && !sessionHead)
+    throw new ApiError(405, 'METHOD_NOT_ALLOWED', `Use ${expectedMethod} for this endpoint`);
   const config = ownerConfiguration();
 
   if (path === '/auth/session') return respond(request, { authenticated: authenticated(request, config) });
@@ -101,17 +130,24 @@ export async function handleAuth(request: Request, path: string): Promise<Respon
 
   reserveLogin();
   const body = await readBody(request);
-  if (Object.keys(body).some(key => key !== 'password') || typeof body.password !== 'string' || body.password.length === 0 || Buffer.byteLength(body.password, 'utf8') > 1024) {
+  if (
+    Object.keys(body).some((key) => key !== 'password') ||
+    typeof body.password !== 'string' ||
+    body.password.length === 0 ||
+    Buffer.byteLength(body.password, 'utf8') > 1024
+  ) {
     throw new ApiError(400, 'INVALID_CREDENTIALS', 'Provide a password of at most 1024 bytes');
   }
-  if (!await verifyPassword(body.password, config)) throw new ApiError(401, 'UNAUTHORIZED', 'Invalid credentials');
+  if (!(await verifyPassword(body.password, config)))
+    throw new ApiError(401, 'UNAUTHORIZED', 'Invalid credentials');
   const response = respond(request, { authenticated: true });
   response.headers.set('Set-Cookie', sessionCookie(config, newSession(config)));
   return response;
 }
 
 export async function requireOwner(request: Request): Promise<void> {
-  if (!authenticated(request, ownerConfiguration())) throw new ApiError(401, 'UNAUTHORIZED', 'Owner authentication is required');
+  if (!authenticated(request, ownerConfiguration()))
+    throw new ApiError(401, 'UNAUTHORIZED', 'Owner authentication is required');
 }
 
 export function requireJob(request: Request): void {

@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { randomUUID } from 'node:crypto';
-import { sectionRoutes, mentorReactions } from '../modules/sections/index';
+import { testRoutes as sectionRoutes } from './routes';
+import { mentorReactions } from '../controllers/mentors/reactions';
 import { createTestDatabase, context } from './helpers';
 import type { GameContext, Row } from '../core/types';
 

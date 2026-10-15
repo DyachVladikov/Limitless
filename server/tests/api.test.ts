@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { scryptSync } from 'node:crypto';
 import { createTestDatabase, inTransaction } from './helpers';
-import { createHandler } from '../api/router';
+import { createHandler } from './http-client';
 
 test('HTTP API: owner-only empty database, explicit setup, camelCase and exact-once focus', async () => {
   process.env.APP_ORIGINS = 'http://localhost:5173';

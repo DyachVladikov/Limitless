@@ -1,4 +1,4 @@
-import { allowedOrigins } from './auth-config';
+import { allowedOrigins, openLocalApi } from './auth-config';
 import { ApiError } from './errors';
 import type { Row } from './types';
 
@@ -16,14 +16,19 @@ export function guardOrigin(request: Request): void {
   if (origin === null && request.headers.get('sec-fetch-site') === 'cross-site') {
     throw new ApiError(403, 'ORIGIN_FORBIDDEN', 'Cross-site request requires an allowed Origin');
   }
-  if (SAFE_METHODS.has(request.method)) return;
+  if (SAFE_METHODS.has(request.method) || openLocalApi()) return;
   // This exemption only removes browser CSRF checks. The dispatcher still calls
   // requireJob, which independently authenticates the bearer credential.
-  const cronRequest = new URL(request.url).pathname.replace(/\/$/,'') === '/api/jobs/rollover'
-    && /^Bearer \S+$/i.test(request.headers.get('authorization') ?? '');
+  const cronRequest =
+    new URL(request.url).pathname.replace(/\/$/, '') === '/api/jobs/rollover' &&
+    /^Bearer \S+$/i.test(request.headers.get('authorization') ?? '');
   if (cronRequest) return;
   if (!origin || request.headers.get('x-requested-with') !== 'Limitless') {
-    throw new ApiError(403, 'CSRF_REJECTED', 'An allowed Origin and X-Requested-With: Limitless are required');
+    throw new ApiError(
+      403,
+      'CSRF_REJECTED',
+      'An allowed Origin and X-Requested-With: Limitless are required',
+    );
   }
 }
 
@@ -31,11 +36,13 @@ export async function readBody(request: Request): Promise<Row> {
   const contentLength = request.headers.get('content-length');
   if (contentLength !== null) {
     if (!/^\d+$/.test(contentLength)) throw new ApiError(400, 'INVALID_BODY', 'Invalid request body');
-    if (Number(contentLength) > MAX_BODY_BYTES) throw new ApiError(413, 'BODY_TOO_LARGE', 'Request body is too large');
+    if (Number(contentLength) > MAX_BODY_BYTES)
+      throw new ApiError(413, 'BODY_TOO_LARGE', 'Request body is too large');
   }
   if (!request.body) return {};
   const contentType = request.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase();
-  if (contentType !== 'application/json') throw new ApiError(415, 'UNSUPPORTED_MEDIA_TYPE', 'Content-Type must be application/json');
+  if (contentType !== 'application/json')
+    throw new ApiError(415, 'UNSUPPORTED_MEDIA_TYPE', 'Content-Type must be application/json');
 
   const reader = request.body.getReader();
   const chunks: Uint8Array[] = [];
@@ -83,12 +90,17 @@ function responseHeaders(request: Request): Headers {
       headers.set('Access-Control-Allow-Origin', origin);
       headers.set('Access-Control-Allow-Credentials', 'true');
     }
-  } catch { /* Fail closed: do not include CORS permission headers. */ }
+  } catch {
+    /* Fail closed: do not include CORS permission headers. */
+  }
   return headers;
 }
 
 export function respond(request: Request, data: unknown, status = 200): Response {
-  return new Response(status === 204 || request.method === 'HEAD' ? null : JSON.stringify(data), { status, headers: responseHeaders(request) });
+  return new Response(status === 204 || request.method === 'HEAD' ? null : JSON.stringify(data), {
+    status,
+    headers: responseHeaders(request),
+  });
 }
 
 export function respondError(request: Request, error: unknown): Response {
@@ -98,20 +110,31 @@ export function respondError(request: Request, error: unknown): Response {
   } else {
     const code = error && typeof error === 'object' && 'code' in error ? error.code : undefined;
     switch (code) {
-      case '23505': case '23503':
+      case '23505':
+      case '23503':
         publicError = new ApiError(409, 'CONFLICT', 'The operation conflicts with existing data');
         break;
-      case '23514': case '23502': case '22P02': case '22003': case '22007': case '22008':
+      case '23514':
+      case '23502':
+      case '22P02':
+      case '22003':
+      case '22007':
+      case '22008':
         publicError = new ApiError(400, 'INVALID_DATA', 'The provided data is invalid');
         break;
-      case '40001': case '40P01':
+      case '40001':
+      case '40P01':
         publicError = new ApiError(409, 'CONFLICT', 'Data changed concurrently; retry the request');
         break;
       default:
         publicError = new ApiError(500, 'INTERNAL_ERROR', 'An internal error occurred');
     }
   }
-  const payload = { code: publicError.code, message: publicError.message, ...(publicError.details === undefined ? {} : { details: publicError.details }) };
+  const payload = {
+    code: publicError.code,
+    message: publicError.message,
+    ...(publicError.details === undefined ? {} : { details: publicError.details }),
+  };
   const response = respond(request, { error: payload }, publicError.status);
   if (publicError.status === 429) response.headers.set('Retry-After', '300');
   return response;
@@ -120,9 +143,16 @@ export function respondError(request: Request, error: unknown): Response {
 export function preflight(request: Request): Response {
   guardOrigin(request);
   const method = request.headers.get('access-control-request-method');
-  const requestedHeaders = (request.headers.get('access-control-request-headers') ?? '').split(',').map(value => value.trim().toLowerCase()).filter(Boolean);
-  if (!request.headers.get('origin') || !method || !ALLOWED_METHODS.includes(method)
-    || requestedHeaders.some(header => !ALLOWED_HEADERS.some(allowed => allowed.toLowerCase() === header))) {
+  const requestedHeaders = (request.headers.get('access-control-request-headers') ?? '')
+    .split(',')
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean);
+  if (
+    !request.headers.get('origin') ||
+    !method ||
+    !ALLOWED_METHODS.includes(method) ||
+    requestedHeaders.some((header) => !ALLOWED_HEADERS.some((allowed) => allowed.toLowerCase() === header))
+  ) {
     throw new ApiError(403, 'CORS_REJECTED', 'Preflight request is not allowed');
   }
   const response = respond(request, null, 204);

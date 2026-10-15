@@ -13,5 +13,8 @@ export function weekday(day: string): number {
   return new Date(`${date(day)}T00:00:00.000Z`).getUTCDay() || 7;
 }
 export function inPeriods(periods: unknown, day: string): boolean {
-  return Array.isArray(periods) && periods.some(period => period && period.startDate <= day && period.endDate >= day);
+  return (
+    Array.isArray(periods) &&
+    periods.some((period) => period && period.startDate <= day && period.endDate >= day)
+  );
 }

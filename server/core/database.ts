@@ -1,5 +1,6 @@
 import { Pool, types } from 'pg';
 import { ApiError } from './errors';
+import { openLocalApi } from './auth-config';
 import { normalizeRow } from './sql';
 import type { Row, Sql } from './types';
 
@@ -19,9 +20,10 @@ export function databasePool(): Pool {
   for (const key of ['sslmode', 'sslcert', 'sslkey', 'sslrootcert']) url.searchParams.delete(key);
   const size = Number(process.env.DATABASE_POOL_SIZE ?? '3');
   if (!Number.isSafeInteger(size) || size < 1 || size > 20) throw new ApiError(503, 'DATABASE_NOT_CONFIGURED', 'Некорректный размер пула БД');
+  const ca = process.env.DATABASE_CA_CERT?.replace(/\\n/g, '\n');
   pool = new Pool({
     connectionString: url.toString(), max: size, connectionTimeoutMillis: 5000, idleTimeoutMillis: 30000,
-    ssl: local ? false : { rejectUnauthorized: true, ...(process.env.DATABASE_CA_CERT ? { ca: process.env.DATABASE_CA_CERT.replace(/\\n/g, '\n') } : {}) },
+    ssl: local ? false : { rejectUnauthorized: Boolean(ca) || !openLocalApi(), ...(ca ? { ca } : {}) },
     application_name: 'limitless-backend',
   });
   pool.on('error', () => console.error('Idle PostgreSQL connection failed'));

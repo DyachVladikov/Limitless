@@ -2,13 +2,17 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { test } from 'node:test';
 import { createTestDatabase, context, inTransaction } from './helpers';
-import { createProfile, prepareDay, gameRoutes, settleGame, assertCompletedQuests, applyEffect, metrics } from '../modules/game';
+import { createProfile } from '../game/profile';
+import { prepareDay } from '../game/days';
+import { settleGame, assertCompletedQuests, metrics } from '../game/settlement';
+import { applyEffect } from '../game/effects';
+import { gameHandlers } from './game-handlers';
 import type { GameContext, Row } from '../core/types';
 
 async function call(ctx: GameContext, method: string, path: string, body: Row = {}, params: Row = {}) {
-  const route = gameRoutes.find(r => r.method === method && r.path === path);
-  assert.ok(route, `${method} ${path} must exist`);
-  return route.handle(ctx, { body, params, query: new URLSearchParams() }) as Promise<any>;
+  const handler = gameHandlers[`${method} ${path}`];
+  assert.ok(handler, `${method} ${path} must exist`);
+  return handler(ctx, { body, params, query: new URLSearchParams() }) as Promise<any>;
 }
 async function setup(now = '2026-10-10T09:00:00.000Z') {
   const db = await createTestDatabase();
@@ -381,4 +385,49 @@ test('long absence catchup stays bounded, preserves streaks and resumes only on 
     assert.equal(later.profile.login_streak,2);
     assert.equal(later.profile.activity_streak,2);
   } finally { await base.close(); }
+});
+
+test('effect arithmetic keeps cents exact at the database XP limit and rejects overflow before saving', async () => {
+  const { db, ctx } = await setup();
+  try {
+    await applyEffect(ctx, { xp: '999999999999.97', stats: { strength: 2 } });
+    const reward = await applyEffect(ctx, { xp: '0.02', stats: {} });
+    assert.equal(reward.xp, 0.02);
+    assert.equal(ctx.profile.total_exp, '999999999999.99');
+    const version = ctx.profile.version;
+    await assert.rejects(applyEffect(ctx, { xp: '0.01', stats: { strength: 1 } }), /XP limit/);
+    assert.equal(ctx.profile.version, version);
+    assert.equal(ctx.profile.stat_strength, 2);
+
+    const reversed = await applyEffect(ctx, { xp: '999999999999.99', stats: { strength: 5 } }, -1);
+    assert.deepEqual(reversed, { xp: 999999999999.99, stats: { strength: 2 } });
+    assert.equal(Number(ctx.profile.total_exp), 0);
+    assert.equal(ctx.profile.stat_strength, 0);
+  } finally { await db.close(); }
+});
+
+test('absence catchup stops at stored day facts and clears nutrition without applying a penalty', async () => {
+  const db = await createTestDatabase();
+  try {
+    await createProfile(db, {
+      name: 'Owner',
+      plannedAbsences: [{ startDate: '2026-10-11', endDate: '2027-10-09' }],
+      nutritionGoals: { calories: 1000, protein: 100, fat: 50, carbs: 200 },
+    }, '2026-10-10T09:00:00Z');
+    const ctx = await context(db);
+    await prepareDay(ctx);
+    await applyEffect(ctx, { xp: '20.25', stats: {} });
+    await db.query(`
+      INSERT INTO nutrition_entries(id, game_date, title, calories_per_portion,
+        protein_per_portion, fat_per_portion, carbs_per_portion)
+      VALUES($1, '2027-02-01', 'Vacation meal', 0, 0, 0, 0)
+    `, [randomUUID()]);
+
+    const returned = await context(db, '2027-10-10T09:00:00Z');
+    await prepareDay(returned);
+    assert.equal(returned.profile.current_day, '2027-10-10');
+    assert.equal(returned.profile.last_closed_day, '2027-10-09');
+    assert.equal(Number(returned.profile.total_exp), 20.25);
+    assert.equal((await db.query('SELECT count(*) AS count FROM nutrition_entries')).rows[0].count, 0);
+  } finally { await db.close(); }
 });
