@@ -238,6 +238,36 @@ test('error responses preserve intended API errors but never expose database or 
   assert.doesNotMatch(await respondError(request('/profile'), new Error('sensitive environment')).text(), /sensitive/);
 });
 
+test('database outages return 503 and log their original cause without credentials or request data', async (t) => {
+  const logs: unknown[][] = [];
+  t.mock.method(console, 'error', (...args: unknown[]) => logs.push(args));
+  for (const error of [
+    new Error('timeout exceeded when trying to connect'),
+    new Error('timeout expired'),
+    new Error('Connection terminated unexpectedly'),
+    new Error('Query read timeout'),
+    { code: 'ECONNREFUSED' }, { code: 'ENOTFOUND' },
+    { code: 'SELF_SIGNED_CERT_IN_CHAIN' }, { code: '53300' },
+  ]) {
+    const response = respondError(request('/profile'), error);
+    assert.equal(response.status, 503);
+    assert.equal((await response.json()).error.code, 'DATABASE_UNAVAILABLE');
+  }
+  assert.equal(respondError(request('/profile'), {
+    code: '22P02', message: 'invalid input syntax: "timeout expired"',
+  }).status, 400);
+  const cause = Object.assign(new Error('Connection terminated at postgresql://owner:database-password@db.example/private'), {
+    code: 'ECONNRESET', detail: 'private SQL parameters',
+  });
+  respondError(request('/profile?token=query-secret', { method: 'POST', body: 'private request body' }),
+    new ApiError(503, 'DATABASE_UNAVAILABLE', 'Unavailable', undefined, { cause }));
+  const logged = JSON.stringify(logs.at(-1));
+  assert.match(logged, /POST \/api\/profile/);
+  assert.match(logged, /ECONNRESET/);
+  assert.match(logged, /Connection terminated/);
+  assert.doesNotMatch(logged, /database-password|owner|db\.example|private|query-secret/);
+});
+
 test('password setup script creates usable salted hashes without taking credentials in arguments', async () => {
   const script = fileURLToPath(new URL('../scripts/hash-password.mjs', import.meta.url));
   const generated = spawnSync(process.execPath, [script], { input: password + '\n', encoding: 'utf8' });

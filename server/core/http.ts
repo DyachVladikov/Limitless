@@ -1,5 +1,5 @@
 import { allowedOrigins, openLocalApi } from "./auth-config";
-import { ApiError } from "./errors";
+import { ApiError, isDatabaseUnavailable, logServerError } from "./errors";
 import type { Row } from "./types";
 
 const MAX_BODY_BYTES = 64 * 1024;
@@ -145,6 +145,12 @@ export function respondError(request: Request, error: unknown): Response {
   let publicError: ApiError;
   if (error instanceof ApiError) {
     publicError = error;
+  } else if (isDatabaseUnavailable(error)) {
+    publicError = new ApiError(
+      503,
+      "DATABASE_UNAVAILABLE",
+      "База данных временно недоступна",
+    );
   } else {
     const code =
       error && typeof error === "object" && "code" in error
@@ -179,39 +185,16 @@ export function respondError(request: Request, error: unknown): Response {
           "Data changed concurrently; retry the request",
         );
         break;
-      case "ETIMEDOUT":
-      case "ECONNRESET":
-      case "EPIPE":
-      case "CONNECTION_TIMEOUT":
-      case "57P01":
-      case "57P03":
-      case "57014":
+      default:
         publicError = new ApiError(
-          503,
-          "DATABASE_UNAVAILABLE",
-          "База данных временно недоступна",
+          500,
+          "INTERNAL_ERROR",
+          "An internal error occurred",
         );
-        break;
-      default: {
-        const message =
-          error && typeof error === "object" && "message" in error
-            ? String(error.message)
-            : "";
-        publicError =
-          message.includes("Connection terminated") ||
-          message.includes("Query read timeout")
-          ? new ApiError(
-              503,
-              "DATABASE_UNAVAILABLE",
-              "База данных временно недоступна",
-            )
-          : new ApiError(
-              500,
-              "INTERNAL_ERROR",
-              "An internal error occurred",
-            );
-      }
     }
+  }
+  if (publicError.status >= 500) {
+    logServerError(`${request.method} ${new URL(request.url).pathname}`, error);
   }
   const payload = {
     code: publicError.code,

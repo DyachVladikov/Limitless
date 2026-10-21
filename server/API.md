@@ -70,7 +70,7 @@ type Envelope<T> = {
 | 409 | Устаревшая версия/выдача, конфликт ID, запрещённая отмена, недоступное действие |
 | 413 / 415 | Тело слишком большое / неверный Content-Type |
 | 429 | Слишком много попыток входа; `Retry-After: 300` |
-| 503 | Не заданы настройки защиты/подключения |
+| 503 | Не заданы настройки защиты/подключения или временно недоступна БД |
 | 500 | Внутренняя ошибка; SQL и секреты не возвращаются |
 
 При `COMPLETED_QUEST_DEPENDENCY` `details.questIds` указывает завершённые квесты, которым противоречит отмена. Их награды не переигрываются: отмена отклоняется целиком.
@@ -345,11 +345,16 @@ npm --prefix server run dev
 
 API слушает `http://localhost:8080/api`. Настройки находятся в локальном `server/.env`; образец имён переменных — [.env.example](.env.example). Существующий `.env` при обновлении кода сохраняется.
 
-- `DATABASE_URL` — PostgreSQL-строка подключения из Supabase Connect; `DATABASE_POOL_SIZE` — размер пула, по умолчанию 3. `DATABASE_CA_CERT` — сертификат CA при необходимости.
+Фронтенд запускается отдельно: `npm --prefix client run dev`. Корневой `npm run dev` запускает только фронтенд, сервер нужно оставить работающим в другом терминале.
+
+- `DATABASE_URL` — строка из Supabase Dashboard → Connect → Direct connection: `postgresql://postgres:ENCODED_PASSWORD@db.PROJECT_REF.supabase.co:5432/postgres`. Подставь идентификатор проекта и пароль БД с percent-encoding; строка хранится только на сервере. Стандартному direct-host нужен доступ по IPv6. После изменения `.env` перезапусти сервер.
+- `DATABASE_POOL_SIZE` — размер пула, по умолчанию 3. `DATABASE_CA_CERT` — сертификат CA при необходимости; в production проверка TLS-сертификата обязательна.
 - `APP_ORIGINS` — адреса фронтенда через запятую, например `http://localhost:3000`. В production укажи точные HTTPS origins без завершающего `/`.
 - `OWNER_PASSWORD_HASH` — результат `npm --prefix server run hash-password`; команда запрашивает пароль скрыто.
 - `SESSION_SECRET` и `CRON_SECRET` — разные случайные секреты длиной не менее 32 байт.
 - `SESSION_COOKIE_SAMESITE` — `lax`, либо `none` для фронтенда и API на разных сайтах с HTTPS.
+
+Если production-подключение сообщает `SELF_SIGNED_CERT_IN_CHAIN`, открой Supabase Dashboard → свой проект → Database → Settings → SSL Configuration → Download Certificate. Вставь **полное содержимое** скачанного сертификата в `DATABASE_CA_CERT` в `server/.env`, заключив его в двойные кавычки; реальные переносы строк внутри кавычек поддерживаются. Перезапусти сервер. Это настройка доверенного CA, а не отключение проверки TLS; менять переключатель SSL enforcement для этого не нужно. Подробнее: [SSL в Supabase](https://supabase.com/docs/guides/platform/ssl-enforcement).
 
 В development игровой API открыт локально; в production требуется вход. Production cookie имеет `HttpOnly`, `Secure` и срок 7 дней. Изменение пароля или `SESSION_SECRET` отзывает существующие сессии. Ограничение входа — 30 попыток за 5 минут на процесс.
 

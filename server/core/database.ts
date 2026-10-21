@@ -1,18 +1,18 @@
-import { setDefaultResultOrder } from "node:dns";
 import { Pool, types, type PoolClient } from "pg";
-import { ApiError } from "./errors";
+import { ApiError, isDatabaseUnavailable, logServerError } from "./errors";
 import { openLocalApi } from "./auth-config";
 import { normalizeRow } from "./sql";
 import type { Row, Sql } from "./types";
 
-// macOS otherwise prefers IPv6 to the Supabase pooler and then hangs on ETIMEDOUT.
-setDefaultResultOrder("ipv4first");
-
 // Dates remain game-day strings; timestamptz is normalized to ISO at the boundary.
 types.setTypeParser(1082, (value) => value);
-let pool: Pool | undefined;
+// Next.js reloads server modules in development; keep one pool per process.
+const databaseGlobal = globalThis as typeof globalThis & {
+  limitlessDatabasePool?: Pool;
+};
+
 export function databasePool(): Pool {
-  if (pool) return pool;
+  if (databaseGlobal.limitlessDatabasePool) return databaseGlobal.limitlessDatabasePool;
   const raw = process.env.DATABASE_URL;
   if (!raw)
     throw new ApiError(
@@ -57,11 +57,13 @@ export function databasePool(): Pool {
       "Некорректный размер пула БД",
     );
   const ca = process.env.DATABASE_CA_CERT?.replace(/\\n/g, "\n");
-  pool = new Pool({
+  const pool = new Pool({
     connectionString: url.toString(),
     max: size,
     connectionTimeoutMillis: 8000,
-    idleTimeoutMillis: 10000,
+    idleTimeoutMillis: 30000,
+    statement_timeout: 15000,
+    query_timeout: 20000,
     keepAlive: true,
     keepAliveInitialDelayMillis: 5000,
     ssl: local
@@ -72,71 +74,18 @@ export function databasePool(): Pool {
         },
     application_name: "limitless-backend",
   });
-  pool.on("error", () => undefined);
+  pool.on("error", (error) => logServerError("database.pool", error));
   pool.on("connect", (client) => {
-    client.on("error", () => undefined);
+    client.on("error", (error) => logServerError("database.connection", error));
   });
+  databaseGlobal.limitlessDatabasePool = pool;
   return pool;
-}
-
-function isTransientConnectionError(error: unknown): boolean {
-  if (!error || typeof error !== "object") return false;
-  const code = "code" in error ? String(error.code) : "";
-  const message = "message" in error ? String(error.message) : "";
-  return (
-    code === "ETIMEDOUT" ||
-    code === "ECONNRESET" ||
-    code === "EPIPE" ||
-    code === "CONNECTION_TIMEOUT" ||
-    code === "57P01" ||
-    code === "57P03" ||
-    code === "55P03" ||
-    code === "57014" ||
-    message.includes("Connection terminated") ||
-    message.includes("Query read timeout") ||
-    message.includes("timeout expired") ||
-    message.includes("canceling statement due to statement timeout")
-  );
-}
-
-function databaseUnavailable(): ApiError {
-  return new ApiError(
-    503,
-    "DATABASE_UNAVAILABLE",
-    "База данных временно недоступна",
-  );
-}
-
-function escapeLiteral(value: string): string {
-  return `'${value.replace(/'/g, "''")}'`;
-}
-
-function sqlLiteral(value: unknown): string {
-  if (value === null || value === undefined) return "NULL";
-  if (typeof value === "boolean") return value ? "TRUE" : "FALSE";
-  if (typeof value === "number" && Number.isFinite(value)) return String(value);
-  if (typeof value === "bigint") return String(value);
-  if (value instanceof Date) return `${escapeLiteral(value.toISOString())}::timestamptz`;
-  if (typeof value === "object") return `${escapeLiteral(JSON.stringify(value))}::jsonb`;
-  return escapeLiteral(String(value));
-}
-
-// Transaction-mode PgBouncer desyncs after node-pg's extended protocol ($1, $2).
-function simpleQuery(sql: string, values: unknown[]): string {
-  if (values.length === 0) return sql;
-  return sql.replace(/\$(\d+)/g, (_, raw: string) => {
-    const index = Number(raw) - 1;
-    if (!Number.isInteger(index) || index < 0 || index >= values.length) {
-      throw new ApiError(500, "INTERNAL_ERROR", "Некорректный SQL-параметр");
-    }
-    return sqlLiteral(values[index]);
-  });
 }
 
 function sqlFrom(connection: PoolClient): Sql {
   return {
     async query<R = Row>(sql: string, values: unknown[] = []) {
-      const result = await connection.query(simpleQuery(sql, values));
+      const result = await connection.query(sql, values);
       return {
         rows: result.rows.map(normalizeRow) as R[],
         rowCount: result.rowCount,
@@ -147,24 +96,62 @@ function sqlFrom(connection: PoolClient): Sql {
 
 export type TransactionRunner = <T>(run: (db: Sql) => Promise<T>) => Promise<T>;
 
-export async function withDatabase<T>(run: (db: Sql) => Promise<T>): Promise<T> {
-  const connection = await databasePool().connect();
-  connection.on("error", () => undefined);
-  let destroyed = false;
+async function runWithConnection<T>(run: (db: Sql) => Promise<T>, atomic: boolean): Promise<T> {
+  let connection: PoolClient | undefined;
+  let started = false;
+  let discard = false;
   try {
-    return await run(sqlFrom(connection));
+    connection = await databasePool().connect();
+    if (atomic) {
+      await connection.query("BEGIN");
+      started = true;
+      await connection.query(`
+        SET LOCAL lock_timeout = '10s';
+        SET LOCAL statement_timeout = '15s';
+        SET LOCAL idle_in_transaction_session_timeout = '15s';
+        SET LOCAL TIME ZONE 'UTC'
+      `);
+      // One owner: serialize setup, rollover and rewards before reading the profile.
+      // The lock is released automatically on COMMIT or ROLLBACK.
+      await connection.query("SELECT pg_advisory_xact_lock(1869376617, 1)");
+    }
+    const result = await run(sqlFrom(connection));
+    if (atomic) {
+      await connection.query("COMMIT");
+      started = false;
+    }
+    return result;
   } catch (error) {
-    destroyed = true;
-    connection.release(true);
-    if (isTransientConnectionError(error)) throw databaseUnavailable();
+    discard = isDatabaseUnavailable(error);
+    // A broken connection may never answer ROLLBACK either. Discarding it closes
+    // the session and lets PostgreSQL roll back without another network wait.
+    if (connection && started && !discard) {
+      try {
+        await connection.query("ROLLBACK");
+      } catch (rollbackError) {
+        discard = true;
+        logServerError("database.rollback", rollbackError);
+      }
+    }
+    if (isDatabaseUnavailable(error)) {
+      throw new ApiError(
+        503,
+        "DATABASE_UNAVAILABLE",
+        "База данных временно недоступна",
+        undefined,
+        { cause: error },
+      );
+    }
     throw error;
   } finally {
-    if (!destroyed) connection.release();
+    connection?.release(discard);
   }
 }
 
+export async function withDatabase<T>(run: (db: Sql) => Promise<T>): Promise<T> {
+  return runWithConnection(run, false);
+}
+
 export async function transaction<T>(run: (db: Sql) => Promise<T>): Promise<T> {
-  // Transaction pooler (6543) never answers the query after BEGIN. Autocommit
-  // statements on the same client are fine for this single-player app.
-  return withDatabase(run);
+  return runWithConnection(run, true);
 }
