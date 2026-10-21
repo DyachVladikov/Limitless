@@ -8,10 +8,11 @@ interface QuestProps {
 }
 
 export const Quest = ({ quest }: QuestProps) => {
-  const { title, description, icon, exp, targetCount, progress, isCompleted } =
+  const { title, description, icon, rewardXp, targetCount, progress, completedAt } =
     quest;
+  const isCompleted = Boolean(completedAt);
 
-  const Icon = getQuestIcon(icon);
+  const Icon = getQuestIcon(icon ?? "star");
   const ratio = Math.min(progress / targetCount, 1);
 
   return (
@@ -25,7 +26,7 @@ export const Quest = ({ quest }: QuestProps) => {
           <span className="quest__progress-text">
             {progress} / {targetCount}
           </span>
-          <span className="quest__exp">+{exp} XP</span>
+          <span className="quest__exp">+{rewardXp} XP</span>
         </div>
         <p className="quest__description">{description}</p>
         <div className="quest__bar">

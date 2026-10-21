@@ -2,8 +2,11 @@ export type DailyTask = {
   id: string;
   title: string;
   description: string;
-  icon: string;
-  exp: number;
+  icon: string | null;
   category: "study" | "sport" | "health" | "work" | "rationality";
-  isCompleted: boolean;
+  rewardXp: number;
+  assignmentId: string | null;
+  assignedFor: string | null;
+  completedAt: string | null;
+  version: string;
 };

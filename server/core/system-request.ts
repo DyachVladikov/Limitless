@@ -35,7 +35,7 @@ export async function rolloverRequest(
     requireJob(request);
     const now = runtime.now();
     const data = await runtime.runTransaction(async (db) => {
-      const profile = await one(db, 'SELECT * FROM profiles WHERE id=1 FOR UPDATE');
+      const profile = await one(db, 'SELECT * FROM profiles WHERE id=1');
       if (!profile) return { configured: false };
 
       const ctx: GameContext = { db, profile, now, today: moscowDate(now), events: [] };

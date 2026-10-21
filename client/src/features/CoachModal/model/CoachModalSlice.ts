@@ -3,7 +3,7 @@ import { CoachModal } from "./types";
 
 const initialState: CoachModal = {
   coach: null,
-  isOpen: true,
+  isOpen: false,
 };
 
 export const coachModalSlice = createSlice({

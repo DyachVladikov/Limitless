@@ -1,4 +1,4 @@
-import type { User } from "@/entities/user";
+import type { ProfileStats } from "@/entities/profile";
 import type { IconType } from "react-icons";
 import {
   FaBolt,
@@ -20,15 +20,18 @@ const MAX_STAT_VALUE = 100;
 const LABEL_RADIUS_RATIO = 1.34;
 const LABEL_TEXT_OFFSET = 34;
 
-const STATS_CONFIG: { key: keyof User["stats"]; name: string; Icon: IconType }[] =
-  [
-    { key: "statDiscipline", name: "Discipline", Icon: FaMountain },
-    { key: "statStrength", name: "Strength", Icon: FaDumbbell },
-    { key: "statEnergy", name: "Energy", Icon: FaBolt },
-    { key: "statRationality", name: "Rationality", Icon: FaBrain },
-    { key: "statEgo", name: "Ego", Icon: FaCrown },
-    { key: "statIntelligence", name: "Intelligence", Icon: FaBookOpen },
-  ];
+const STATS_CONFIG: {
+  key: keyof ProfileStats;
+  name: string;
+  Icon: IconType;
+}[] = [
+  { key: "statDiscipline", name: "Discipline", Icon: FaMountain },
+  { key: "statStrength", name: "Strength", Icon: FaDumbbell },
+  { key: "statEnergy", name: "Energy", Icon: FaBolt },
+  { key: "statRationality", name: "Rationality", Icon: FaBrain },
+  { key: "statEgo", name: "Ego", Icon: FaCrown },
+  { key: "statIntelligence", name: "Intelligence", Icon: FaBookOpen },
+];
 
 const LABEL_SIDES = ["top", "right", "right", "bottom", "left", "left"];
 
@@ -51,7 +54,7 @@ const getPolygonPoints = (ratios: number[]) =>
 const toPercent = (value: number) => (value / RADAR_SIZE) * 100;
 
 type StatsRadarProps = {
-  stats: User["stats"];
+  stats: ProfileStats;
 };
 
 export default function StatsRadar({ stats }: StatsRadarProps) {
@@ -59,10 +62,7 @@ export default function StatsRadar({ stats }: StatsRadarProps) {
     ({ key }) => Math.min(stats[key], MAX_STAT_VALUE) / MAX_STAT_VALUE,
   );
 
-  const totalPower = STATS_CONFIG.reduce(
-    (sum, { key }) => sum + stats[key],
-    0,
-  );
+  const totalPower = STATS_CONFIG.reduce((sum, { key }) => sum + stats[key], 0);
 
   return (
     <div className="stats-radar">

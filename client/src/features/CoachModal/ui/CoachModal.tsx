@@ -4,6 +4,9 @@ import { FaTimes } from "react-icons/fa";
 import "./CoachModal.scss";
 import { useAppDispatch, useAppSelector } from "@/app/hooks/useAppStore";
 import { coachModalSlice } from "../model/CoachModalSlice";
+import classNames from "classnames";
+import { useEffect, useState } from "react";
+import { useGetCoaches } from "@/entities/coaches";
 
 const SOUND_BARS = [
   { x: 3, y: 10, height: 4 },
@@ -20,13 +23,55 @@ export const CoachModal = () => {
   const CloseButton = () => {
     dispatch(closeModal());
   };
+  const { data: mentor } = useGetCoaches("home");
 
   const { isOpen } = useAppSelector((state) => state.coachModal);
-  if (!isOpen) {
+  const [isMounted, setIsMounted] = useState(isOpen);
+  const [motion, setMotion] = useState<"enter" | "leave" | null>(
+    isOpen ? "enter" : null,
+  );
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsMounted(true);
+      setMotion("enter");
+      console.log(mentor);
+      return;
+    }
+    if (!isMounted) {
+      return;
+    }
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reducedMotion) {
+      setIsMounted(false);
+      setMotion(null);
+      return;
+    }
+    setMotion("leave");
+  }, [isOpen, isMounted]);
+
+  if (!isMounted) {
     return null;
   }
+
   return (
-    <div className="coach-modal">
+    <div
+      className={classNames("coach-modal", {
+        "coach-modal--enter": motion === "enter",
+        "coach-modal--leave": motion === "leave",
+      })}
+      onAnimationEnd={(event) => {
+        if (event.target !== event.currentTarget) {
+          return;
+        }
+        if (motion === "leave") {
+          setIsMounted(false);
+          setMotion(null);
+        }
+      }}
+    >
       <div className="coach-modal__wrapper">
         <div className="coach-modal__header">
           <Button
@@ -81,9 +126,9 @@ export const CoachModal = () => {
               </span>
             </div>
             <Button
-              className="coach-modal__content-main-get-motivated"
-              label="Get Motivated"
-              title="Get Motivated"
+              className="coach-modal__content-main-confirm"
+              label="Confirm"
+              title="Confirm"
             />
           </div>
         </div>

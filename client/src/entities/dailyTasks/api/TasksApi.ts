@@ -2,21 +2,21 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/shared/api/axios";
+import type { DailyTask } from "../model/types";
 
-export interface DailyTask {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  exp: number;
-  category: "study" | "sport" | "health" | "work" | "rationality";
-  isCompleted: boolean;
-}
+type TodayTasks = {
+  gameDate: string;
+  absent: boolean;
+  tasks: DailyTask[];
+};
 
 export function useTodayTasks() {
   const { data, isLoading } = useQuery({
     queryKey: ["todayTasks"],
-    queryFn: () => api.get<DailyTask[]>("tasks/today").then((res) => res.data),
+    queryFn: async () => {
+      const { data } = await api.get<TodayTasks>("tasks/today");
+      return data.tasks;
+    },
   });
 
   return { data, isLoading };
@@ -27,10 +27,14 @@ export function useToggleTask() {
 
   return useMutation({
     mutationFn: (task: DailyTask) =>
-      api.patch(`tasks/today/${task.id}`, { isCompleted: !task.isCompleted }),
+      api.patch(`tasks/today/${task.id}`, {
+        assignmentId: task.assignmentId,
+        version: task.version,
+        completed: !task.completedAt,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todayTasks"] });
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
   });
 }

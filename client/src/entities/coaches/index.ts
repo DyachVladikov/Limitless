@@ -1,2 +1,2 @@
 export { useGetCoaches } from "./api/coachApi";
-export type { CoachType } from "./model/CoachType";
+export type { MentorType } from "./model/CoachType";

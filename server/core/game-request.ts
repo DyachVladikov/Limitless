@@ -33,7 +33,7 @@ interface RequestOptions {
 }
 
 export async function loadGame(db: Sql, now: string): Promise<GameContext> {
-  const profile = await one<Row>(db, 'SELECT * FROM profiles WHERE id=1 FOR UPDATE');
+  const profile = await one<Row>(db, 'SELECT * FROM profiles WHERE id=1');
   if (!profile) {
     throw new ApiError(404, 'PROFILE_NOT_CONFIGURED', 'Сначала создайте профиль через POST /api/profile');
   }
@@ -54,14 +54,17 @@ export async function gameRequest(
     const writing = request.method !== 'GET' && request.method !== 'HEAD';
     const body = writing ? await readBody(request) : {};
     const now = runtime.now();
-
+    const today = moscowDate(now);
     const result = await runtime.runTransaction(async (db) => {
       if (options.createProfile) await createProfile(db, body, now);
       const ctx = await loadGame(db, now);
+      const dayOpen = ctx.profile.current_day === today;
 
-      // Сначала закрываем прошлый день и выдаём задания на текущий.
-      await prepareDay(ctx);
-      await settleGame(ctx);
+      // GET of an already-open day is a short read. Opening the day still settles.
+      if (writing || !dayOpen) {
+        await prepareDay(ctx);
+        await settleGame(ctx);
+      }
 
       const data = await action(ctx, {
         body,
@@ -69,10 +72,14 @@ export async function gameRequest(
         query: new URL(request.url).searchParams,
       });
 
-      // Отмена действия не может нарушать уже завершённый квест.
-      if (writing) await assertCompletedQuests(ctx);
-      await settleGame(ctx);
-      await mentorReactions(ctx);
+      if (writing) {
+        await assertCompletedQuests(ctx);
+        await settleGame(ctx);
+        await mentorReactions(ctx);
+      } else if (!dayOpen) {
+        await settleGame(ctx);
+        await mentorReactions(ctx);
+      }
 
       return serialize({
         data,

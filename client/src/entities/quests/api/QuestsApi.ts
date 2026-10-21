@@ -7,7 +7,10 @@ import type { Quests } from "../model/types";
 export function useQuests() {
   const { data, isLoading } = useQuery({
     queryKey: ["quests"],
-    queryFn: () => api.get<Quests[]>("quests").then((res) => res.data),
+    queryFn: async () => {
+      const { data } = await api.get<Quests[]>("quests");
+      return data;
+    },
   });
 
   return { data, isLoading };
@@ -16,8 +19,10 @@ export function useQuests() {
 export function useClosestQuests(limit = 3) {
   const { data, isLoading } = useQuery({
     queryKey: ["quests", "closest", limit],
-    queryFn: () =>
-      api.get<Quests[]>(`quests?limit=${limit}`).then((res) => res.data),
+    queryFn: async () => {
+      const { data } = await api.get<Quests[]>(`quests?limit=${limit}`);
+      return data;
+    },
   });
 
   return { data, isLoading };

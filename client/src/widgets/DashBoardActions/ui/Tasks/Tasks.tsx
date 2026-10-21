@@ -11,7 +11,7 @@ export const Tasks = ({ tasks }: TasksProps) => {
     return <div className="tasks">Загрузка...</div>;
   }
 
-  const completedCount = tasks.filter((task) => task.isCompleted).length;
+  const completedCount = tasks.filter((task) => task.completedAt).length;
 
   return (
     <div className="tasks widget">
