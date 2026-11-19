@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks/useAppStore";
 import { coachModalSlice } from "../model/CoachModalSlice";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
-import { useGetCoaches } from "@/entities/coaches";
+import { api } from "@/shared/api/axios";
 
 const SOUND_BARS = [
   { x: 3, y: 10, height: 4 },
@@ -17,25 +17,23 @@ const SOUND_BARS = [
 ];
 
 const { closeModal } = coachModalSlice.actions;
+const sentPopupVersions = new Set<string>();
 
 export const CoachModal = () => {
   const dispatch = useAppDispatch();
   const CloseButton = () => {
     dispatch(closeModal());
   };
-  const { data: mentor } = useGetCoaches("home");
 
-  const { isOpen } = useAppSelector((state) => state.coachModal);
+  const { isOpen, popup } = useAppSelector((state) => state.coachModal);
   const [isMounted, setIsMounted] = useState(isOpen);
   const [motion, setMotion] = useState<"enter" | "leave" | null>(
     isOpen ? "enter" : null,
   );
-
   useEffect(() => {
     if (isOpen) {
       setIsMounted(true);
       setMotion("enter");
-      console.log(mentor);
       return;
     }
     if (!isMounted) {
@@ -52,9 +50,39 @@ export const CoachModal = () => {
     setMotion("leave");
   }, [isOpen, isMounted]);
 
-  if (!isMounted) {
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const closeTimer = setTimeout(() => {
+      dispatch(closeModal());
+    }, 7000);
+
+    return () => {
+      clearTimeout(closeTimer);
+    };
+  }, [isOpen, dispatch]);
+
+  useEffect(() => {
+    if (!isMounted || !popup) {
+      return;
+    }
+    if (sentPopupVersions.has(popup.version)) {
+      return;
+    }
+
+    sentPopupVersions.add(popup.version);
+    api
+      .post("mentors/popup/seen", { version: popup.version })
+      .catch(() => undefined);
+  }, [isMounted, popup]);
+
+  if (!isMounted || !popup) {
     return null;
   }
+
+  console.log(popup);
 
   return (
     <div
@@ -90,7 +118,7 @@ export const CoachModal = () => {
         </div>
         <div className="coach-modal__content">
           <div className="coach-modal__content-header">
-            <h6>Mentor Gojo Satoru</h6>
+            <h6>{popup.name}</h6>
             <span className="coach-modal__sound" aria-hidden>
               <svg
                 className="coach-modal__sound-icon"
@@ -113,12 +141,7 @@ export const CoachModal = () => {
           </div>
           <div className="coach-modal__content-main">
             <div className="coach-modal__content-main-replica">
-              <p>
-                Hello, I'm Gojo Satoru, your mentor for this course. I'm a
-                professional coach with 10 years of experience in the field. I'm
-                here to help you achieve your goals and become a better version
-                of yourself.
-              </p>
+              <p>{popup.phrases[0]?.text}</p>
             </div>
             <div className="coach-modal__content-main-blocks">
               <span className="coach-modal__content-main-description-title">

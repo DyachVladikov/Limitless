@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CoachModal } from "./types";
+import { MentorType } from "@/entities/coaches";
 
 const initialState: CoachModal = {
-  coach: null,
+  popup: null,
   isOpen: false,
 };
 
@@ -10,8 +11,9 @@ export const coachModalSlice = createSlice({
   name: "coachModal",
   initialState,
   reducers: {
-    openModal: (state) => {
+    openModal: (state, action: PayloadAction<MentorType>) => {
       state.isOpen = true;
+      state.popup = action.payload;
     },
     closeModal: (state) => {
       state.isOpen = false;

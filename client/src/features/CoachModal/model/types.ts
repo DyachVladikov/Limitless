@@ -1,6 +1,6 @@
-import { CoachType } from "@/entities/coaches";
+import type { MentorType } from "@/entities/coaches";
 
 export interface CoachModal {
-  coach: CoachType | null;
+  popup: MentorType | null;
   isOpen: boolean;
 }

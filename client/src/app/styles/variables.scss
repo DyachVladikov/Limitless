@@ -29,9 +29,15 @@ Thin – 100
   --color-white-transparent-10: rgba(255, 255, 255, 0.1); /* Базовая обводка */
 
   --color-error: #ab052c; /* Ошибки форм */
+  --color-success: #008000; /* Успешные действия */
 
   --btn-primary-bg: var(--color-gray-08);
   --btn-primary-text: var(--color-white);
+
+  /* Ховер кнопки — по умолчанию палитра Dashboard, страница переопределит */
+  --btn-hover-color: var(--dashboard-btn-hover-color);
+  --btn-hover-border: var(--dashboard-btn-hover-border);
+  --btn-hover-glow: var(--dashboard-btn-hover-glow);
 
   --gradient-card: linear-gradient(
     180deg,
@@ -144,6 +150,10 @@ Thin – 100
   --dashboard-border-neon-hover: 4px solid rgba(167, 139, 250, 0.65); /* При наведении — ярче */
   --dashboard-smoke: rgba(124, 58, 237, 0.9);
 
+  --dashboard-btn-hover-color: var(--dashboard-violet-soft);
+  --dashboard-btn-hover-border: rgba(167, 139, 250, 0.6);
+  --dashboard-btn-hover-glow: var(--dashboard-glow-violet-sm);
+
   /* --- Стекло (glassmorphism) --- */
   --dashboard-bg-glass: rgba(
     139,
@@ -230,6 +240,10 @@ Thin – 100
   --rationality-border-neon: 4px solid rgba(230, 57, 70, 0.35); /* Обводка карточек */
   --rationality-border-neon-hover: 4px solid rgba(255, 89, 100, 0.65); /* При наведении */
 
+  --rationality-btn-hover-color: var(--rationality-ruby-soft);
+  --rationality-btn-hover-border: rgba(255, 89, 100, 0.6);
+  --rationality-btn-hover-glow: var(--rationality-glow-ruby-sm);
+
   /* --- Стекло (glassmorphism) --- */
   --rationality-bg-glass: rgba(230, 57, 70, 0.05); /* Лёгкая заливка карточек */
   --rationality-bg-glass-strong: rgba(
@@ -290,6 +304,10 @@ Thin – 100
   --sport-border-neon: 4px solid rgba(58, 134, 255, 0.35); /* Обводка карточек */
   --sport-border-neon-hover: 4px solid rgba(106, 176, 255, 0.65); /* При наведении */
 
+  --sport-btn-hover-color: var(--sport-blue-soft);
+  --sport-btn-hover-border: rgba(106, 176, 255, 0.6);
+  --sport-btn-hover-glow: var(--sport-glow-blue-sm);
+
   /* --- Стекло (glassmorphism) --- */
   --sport-bg-glass: rgba(58, 134, 255, 0.06); /* Лёгкая заливка карточек */
   --sport-bg-glass-strong: rgba(
@@ -346,6 +364,10 @@ Thin – 100
   /* --- Границы --- */
   --work-border-neon: 4px solid rgba(6, 214, 160, 0.35); /* Обводка карточек */
   --work-border-neon-hover: 4px solid rgba(62, 230, 181, 0.65); /* При наведении */
+
+  --work-btn-hover-color: var(--work-emerald-soft);
+  --work-btn-hover-border: rgba(62, 230, 181, 0.6);
+  --work-btn-hover-glow: var(--work-glow-emerald-sm);
 
   /* --- Стекло (glassmorphism) --- */
   --work-bg-glass: rgba(6, 214, 160, 0.06); /* Лёгкая заливка карточек */

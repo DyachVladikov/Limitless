@@ -1,9 +1,9 @@
-export type MentorSection =
+type MentorSection =
   "home" | "study" | "sport" | "work" | "nutrition" | "rationality";
 
-export type MentorMood = "positive" | "negative" | "neutral";
+type MentorMood = "positive" | "negative" | "neutral";
 
-export type MentorPhraseEvent =
+type MentorPhraseEvent =
   | "idle"
   | "daily_completed"
   | "quest_completed"
@@ -12,14 +12,14 @@ export type MentorPhraseEvent =
   | "cross_reaction"
   | "workout_results_reminder";
 
-export type MentorImages = {
+type MentorImages = {
   default: string;
   positive?: string;
   negative?: string;
   neutral?: string;
 };
 
-export type MentorPhrase = {
+type MentorPhrase = {
   id: string;
   event: MentorPhraseEvent;
   mood: MentorMood;

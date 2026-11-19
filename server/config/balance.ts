@@ -17,7 +17,7 @@ const initial = {
   xpPerLevel: 100,
   statStages: [0, 100, 1000, 5000],
   nutrition: { tolerancePercent: 15, severeDeviationPercent: 35, rewardXp: '10.00', penaltyXp: '5.00' },
-  mentors: { popupChance: 0.2, ownSectionChance: 0.8, popupCooldownMinutes: 15 },
+  mentors: { popupChance: 0.35, ownSectionChance: 0.8, popupCooldownMinutes: 5 },
 };
 export type Balance = typeof initial;
 function freeze<T>(value: T): T {

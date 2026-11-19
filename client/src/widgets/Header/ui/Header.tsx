@@ -86,7 +86,7 @@ export const Header = () => {
       )}
       style={{ "--glow-color": currentColors.main } as React.CSSProperties}
     >
-      <div className="header__inner container">
+      <div className="header__inner ">
         <div className="header__logo">
           <Logo
             mainColor={currentColors.main}

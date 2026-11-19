@@ -5,6 +5,8 @@ type BaseButtonProps = {
   className: string;
   label?: string;
   title?: string;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
   onClick?: () => void;
 };
 type WithoutIcon = BaseButtonProps & {
@@ -39,6 +41,8 @@ export const Button = (props: ButtonProps) => {
     icon,
     onClick,
     hoveredIcon = false,
+    type = "button",
+    disabled = false,
   } = props;
   return (
     <>
@@ -53,10 +57,18 @@ export const Button = (props: ButtonProps) => {
           {
             hovered: hoveredIcon,
           },
+          {
+            "button--disabled": disabled,
+          },
         )}
         aria-label={label}
       >
-        <button className="btn" onClick={() => onClick?.()}>
+        <button
+          disabled={disabled}
+          type={type}
+          className="btn"
+          onClick={() => onClick?.()}
+        >
           {onlyIcon && <>{icon}</>}
           {!onlyIcon && <span>{title}</span>}
         </button>

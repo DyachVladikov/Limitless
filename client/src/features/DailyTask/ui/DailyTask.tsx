@@ -5,8 +5,7 @@ import { ChangeEvent, useState } from "react";
 import classNames from "classnames";
 import { Badge } from "@/shared/Badge";
 import { getCategoryColor } from "@/shared/lib/GetCategoryColor";
-import { coachModalSlice } from "@/features/CoachModal/model/CoachModalSlice";
-import { useAppDispatch } from "@/app/hooks/useAppStore";
+import { useToggleTask } from "@/entities/dailyTasks/api/TasksApi";
 
 interface dailyTaskProps {
   task: DailyTaskType;
@@ -17,13 +16,15 @@ export const DailyTask = ({ task }: dailyTaskProps) => {
   const isCompleted = Boolean(completedAt);
 
   const [isCheckBoxChecked, setIsCheckBoxChecked] = useState(isCompleted);
-  const { openModal } = coachModalSlice.actions;
-  const dispatch = useAppDispatch();
+
+  const { mutate: toggleTask } = useToggleTask();
   const handlerCheckBox = (e: ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
-    setIsCheckBoxChecked(checked);
-    if (checked) {
-      dispatch(openModal());
+    setIsCheckBoxChecked((prev) => !prev);
+    if (isCheckBoxChecked) {
+      toggleTask(task);
+    }
+    if (!isCheckBoxChecked) {
+      toggleTask({ ...task, completedAt: null });
     }
   };
 
@@ -32,7 +33,7 @@ export const DailyTask = ({ task }: dailyTaskProps) => {
   return (
     <div
       className={classNames("daily-tasks", {
-        completed: isCompleted,
+        completed: isCheckBoxChecked,
       })}
     >
       <div className="daily-tasks__main">
